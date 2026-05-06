@@ -1,15 +1,11 @@
 {
   "version": 2,
   "builds": [
-    {
-      "src": "index.html",
-      "use": "@vercel/static"
-    }
+    { "src": "api/register.js", "use": "@vercel/node" },
+    { "src": "ShipMyBuild Landing.html", "use": "@vercel/static" }
   ],
   "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
+    { "src": "/api/register", "dest": "/api/register.js" },
+    { "src": "/(.*)", "dest": "/ShipMyBuild Landing.html" }
   ]
 }
