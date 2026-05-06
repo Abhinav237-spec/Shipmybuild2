@@ -7,485 +7,564 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-
 <style>
-  :root {
-    --paper: #FAF9F5;
-    --ink: #0E0D0B;
-    --ink-2: #2B2924;
-    --ink-3: #6B6862;
-    --ink-4: #B5B1A6;
-    --rule: #E6E3D9;
-    --rule-2: #D6D2C4;
-    --accent: oklch(0.66 0.19 32);   /* warm orange-red */
-    --accent-ink: oklch(0.42 0.15 32);
-    --accent-tint: oklch(0.96 0.04 60);
-    --green: oklch(0.72 0.16 145);
-    --blue: oklch(0.62 0.17 250);
-    --violet: oklch(0.6 0.18 300);
-    --yellow: oklch(0.85 0.16 90);
+:root {
+  --paper: #FAF9F5;
+  --ink: #0E0D0B;
+  --ink-2: #2B2924;
+  --ink-3: #6B6862;
+  --ink-4: #B5B1A6;
+  --rule: #E6E3D9;
+  --rule-2: #D6D2C4;
+  --accent: oklch(0.66 0.19 32);
+  --accent-ink: oklch(0.42 0.15 32);
+  --accent-tint: oklch(0.96 0.04 60);
+  --green: oklch(0.72 0.16 145);
+  --blue: oklch(0.62 0.17 250);
+  --violet: oklch(0.6 0.18 300);
+  --yellow: oklch(0.85 0.16 90);
+  --pad-x: clamp(20px, 4vw, 56px);
+  --gap: 22px;
+}
+[data-density="compact"] { --gap: 14px; }
+[data-density="spacious"] { --gap: 32px; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--paper); color: var(--ink); }
+body {
+  font-family: "Geist", ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "ss01", "ss02", "cv11";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+::selection { background: var(--ink); color: var(--paper); }
+.mono { font-family: "Geist Mono", ui-monospace, monospace; }
+.serif { font-family: "Instrument Serif", "Times New Roman", serif; font-style: italic; font-weight: 400; }
 
-    --pad-x: clamp(20px, 4vw, 56px);
-    --gap: 22px;
-  }
-  [data-density="compact"] { --gap: 14px; }
-  [data-density="spacious"] { --gap: 32px; }
+/* ── Top nav ───────────────────────────────────────────────── */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px var(--pad-x);
+  background: color-mix(in oklab, var(--paper) 88%, transparent);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border-bottom: 1px solid transparent;
+  transition: border-color .2s;
+}
+.nav.scrolled { border-bottom-color: var(--rule); }
+.brand {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 700; font-size: 17px; letter-spacing: -0.01em;
+}
+.brand-mark {
+  width: 26px; height: 26px; border-radius: 7px; background: var(--ink);
+  color: var(--paper);
+  display: grid; place-items: center; font-family: "Geist Mono"; font-weight: 700; font-size: 14px;
+  position: relative; overflow: hidden;
+}
+.brand-mark::after{
+  content:""; position:absolute; inset:0; background: var(--accent);
+  clip-path: polygon(0 60%, 100% 30%, 100% 100%, 0 100%);
+  opacity: .9;
+}
+.brand-mark span { position: relative; z-index: 1; }
+.nav-links { display: flex; gap: 28px; font-size: 13.5px; color: var(--ink-2); }
+.nav-links a { color: inherit; text-decoration: none; transition: color .15s; }
+.nav-links a:hover { color: var(--ink); }
+.nav-cta { display: flex; align-items: center; gap: 10px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 12px; border-radius: 999px;
+  background: var(--paper); border: 1px solid var(--rule);
+  font-size: 11.5px; font-family: "Geist Mono"; color: var(--ink-2);
+}
+.pill .dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--green);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--green) 30%, transparent);
+  animation: pulse 1.8s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 3px color-mix(in oklab, var(--green) 30%, transparent); }
+  50% { box-shadow: 0 0 0 6px color-mix(in oklab, var(--green) 0%, transparent); }
+}
 
-  * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; background: var(--paper); color: var(--ink); }
-  body {
-    font-family: "Geist", ui-sans-serif, system-ui, sans-serif;
-    font-feature-settings: "ss01", "ss02", "cv11";
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-    overflow-x: hidden;
-  }
-  ::selection { background: var(--ink); color: var(--paper); }
+/* Buttons */
+.btn {
+  appearance: none; border: 0; cursor: pointer;
+  font-family: inherit; font-size: 14px; font-weight: 500;
+  padding: 11px 18px; border-radius: 10px;
+  display: inline-flex; align-items: center; gap: 8px;
+  white-space: nowrap;
+  transition: transform .15s, background .15s, color .15s, box-shadow .15s;
+}
+.btn-primary {
+  background: var(--ink); color: var(--paper);
+  box-shadow: 0 1px 0 rgba(255,255,255,.15) inset, 0 6px 18px -6px rgba(14,13,11,.5);
+}
+.btn-primary:hover { transform: translateY(-1px); background: #1a1814; }
+.btn-ghost { background: transparent; color: var(--ink-2); }
+.btn-ghost:hover { color: var(--ink); }
+.btn-arrow { width: 14px; height: 14px; transition: transform .2s; }
+.btn:hover .btn-arrow { transform: translate(2px, -2px); }
 
-  .mono { font-family: "Geist Mono", ui-monospace, monospace; }
-  .serif { font-family: "Instrument Serif", "Times New Roman", serif; font-style: italic; font-weight: 400; }
+/* ── Hero scaffold ─────────────────────────────────────────── */
+.hero {
+  position: relative;
+  padding: clamp(36px, 6vw, 80px) var(--pad-x) clamp(40px, 6vw, 90px);
+  overflow: hidden;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 80px);
+  align-items: center;
+  max-width: 1380px; margin: 0 auto;
+}
+@media (max-width: 960px) { .hero-grid { grid-template-columns: 1fr; gap: 40px; } }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: "Geist Mono"; font-size: 11.5px; color: var(--ink-3);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: 22px;
+}
+.eyebrow::before {
+  content: ""; width: 24px; height: 1px; background: var(--ink-3);
+}
+.h1 {
+  font-size: clamp(44px, 7vw, 96px);
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+  margin: 0 0 26px;
+  text-wrap: balance;
+}
+.h1 .strike { position: relative; white-space: nowrap; }
+.h1 .strike::after {
+  content: ""; position: absolute; left: -2%; right: -2%; top: 56%;
+  height: 6px; background: var(--accent); transform: rotate(-1.5deg);
+  border-radius: 2px;
+}
+.h1 em { font-family: "Instrument Serif"; font-style: italic; font-weight: 400; letter-spacing: -0.01em; }
+.lede {
+  font-size: clamp(16px, 1.5vw, 19px);
+  line-height: 1.5; color: var(--ink-2);
+  max-width: 50ch; margin: 0 0 32px;
+}
+.lede b { font-weight: 600; color: var(--ink); }
+.cta-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.cta-meta { font-size: 12.5px; color: var(--ink-3); display: flex; align-items: center; gap: 8px; }
+.cta-meta .check {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--ink); color: var(--paper);
+  display: grid; place-items: center; font-size: 9px;
+}
 
-  /* ── Top nav ───────────────────────────────────────────────── */
-  .nav {
-    position: sticky; top: 0; z-index: 50;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 18px var(--pad-x);
-    background: color-mix(in oklab, var(--paper) 88%, transparent);
-    backdrop-filter: blur(14px) saturate(140%);
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
-    border-bottom: 1px solid transparent;
-    transition: border-color .2s;
-  }
-  .nav.scrolled { border-bottom-color: var(--rule); }
-  .brand {
-    display: flex; align-items: center; gap: 10px;
-    font-weight: 700; font-size: 17px; letter-spacing: -0.01em;
-  }
-  .brand-mark {
-    width: 26px; height: 26px; border-radius: 7px; background: var(--ink);
-    color: var(--paper);
-    display: grid; place-items: center; font-family: "Geist Mono"; font-weight: 700; font-size: 14px;
-    position: relative; overflow: hidden;
-  }
-  .brand-mark::after{
-    content:""; position:absolute; inset:0; background: var(--accent);
-    clip-path: polygon(0 60%, 100% 30%, 100% 100%, 0 100%);
-    opacity: .9;
-  }
-  .brand-mark span { position: relative; z-index: 1; }
-  .nav-links { display: flex; gap: 28px; font-size: 13.5px; color: var(--ink-2); }
-  .nav-links a { color: inherit; text-decoration: none; transition: color .15s; }
-  .nav-links a:hover { color: var(--ink); }
-  .nav-cta { display: flex; align-items: center; gap: 10px; }
+/* ── Hero stage (right column) ─────────────────────────────── */
+.stage {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  max-width: 620px;
+  margin-left: auto;
+}
 
-  .pill {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 6px 12px; border-radius: 999px;
-    background: var(--paper); border: 1px solid var(--rule);
-    font-size: 11.5px; font-family: "Geist Mono"; color: var(--ink-2);
-  }
-  .pill .dot {
-    width: 7px; height: 7px; border-radius: 50%; background: var(--green);
-    box-shadow: 0 0 0 3px color-mix(in oklab, var(--green) 30%, transparent);
-    animation: pulse 1.8s ease-in-out infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 0 3px color-mix(in oklab, var(--green) 30%, transparent); }
-    50% { box-shadow: 0 0 0 6px color-mix(in oklab, var(--green) 0%, transparent); }
-  }
+/* shared agent card style */
+.agent {
+  position: absolute;
+  width: 200px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: 22px 14px 13px;
+  box-shadow: 0 1px 0 rgba(255,255,255,.8) inset, 0 12px 24px -16px rgba(14,13,11,.25);
+  transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .25s;
+}
+.agent:hover { transform: translate(var(--tx,0), var(--ty,0)) scale(1.04); z-index: 5; box-shadow: 0 1px 0 rgba(255,255,255,.8) inset, 0 16px 36px -14px rgba(14,13,11,.32); }
+.agent.thinking { animation: float 5s ease-in-out infinite; }
+@keyframes float {
+  0%, 100% { transform: translate(var(--tx,0), var(--ty,0)); }
+  50% { transform: translate(var(--tx,0), calc(var(--ty,0) - 6px)); }
+}
+.agent-row { display: flex; align-items: center; gap: 9px; margin-bottom: 9px; }
+.agent-avatar {
+  width: 30px; height: 30px; border-radius: 8px;
+  display: grid; place-items: center;
+  font-family: "Geist Mono"; font-weight: 700; font-size: 13px;
+  flex-shrink: 0;
+}
+.agent-meta { min-width: 0; }
+.agent-name { font-size: 13px; font-weight: 600; line-height: 1.1; letter-spacing: -0.01em; }
+.agent-role { font-size: 10.5px; font-family: "Geist Mono"; color: var(--ink-3); margin-top: 2px; line-height: 1; }
+.agent-quote {
+  font-size: 12px; line-height: 1.4; color: var(--ink-2);
+  border-top: 1px dashed var(--rule);
+  padding-top: 9px;
+  min-height: 50px;
+}
+.agent-quote::before { content: "\201C"; font-family: "Instrument Serif"; font-size: 18px; line-height: 0; vertical-align: -4px; color: var(--ink-3); margin-right: 2px; }
+.agent-vote {
+  position: absolute; top: -11px; right: 12px;
+  background: var(--paper); border: 1px solid var(--rule);
+  border-radius: 999px; padding: 3px 9px;
+  font-family: "Geist Mono"; font-size: 10px; font-weight: 600;
+  color: var(--ink-2);
+  z-index: 2;
+  box-shadow: 0 4px 10px -4px rgba(14,13,11,.18);
+  line-height: 1.4;
+}
+.agent-vote.yes { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.agent-vote.no { background: var(--paper); color: var(--accent-ink); border-color: var(--accent); }
 
-  /* Buttons */
-  .btn {
-    appearance: none; border: 0; cursor: pointer;
-    font-family: inherit; font-size: 14px; font-weight: 500;
-    padding: 11px 18px; border-radius: 10px;
-    display: inline-flex; align-items: center; gap: 8px;
-    white-space: nowrap;
-    transition: transform .15s, background .15s, color .15s, box-shadow .15s;
-  }
-  .btn-primary {
-    background: var(--ink); color: var(--paper);
-    box-shadow: 0 1px 0 rgba(255,255,255,.15) inset, 0 6px 18px -6px rgba(14,13,11,.5);
-  }
-  .btn-primary:hover { transform: translateY(-1px); background: #1a1814; }
-  .btn-ghost { background: transparent; color: var(--ink-2); }
-  .btn-ghost:hover { color: var(--ink); }
-  .btn-arrow { width: 14px; height: 14px; transition: transform .2s; }
-  .btn:hover .btn-arrow { transform: translate(2px, -2px); }
+/* center idea card */
+.idea {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 56%; max-width: 280px;
+  background: var(--ink); color: var(--paper);
+  border-radius: 14px;
+  padding: 16px 16px 14px;
+  box-shadow: 0 24px 60px -24px rgba(14,13,11,.55);
+  z-index: 3;
+}
+.idea-label {
+  font-family: "Geist Mono"; font-size: 10.5px; letter-spacing: 0.08em;
+  color: var(--ink-4); text-transform: uppercase; margin-bottom: 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+.idea-label .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.idea-text {
+  font-size: 16px; line-height: 1.3; letter-spacing: -0.01em; font-weight: 500;
+}
+.idea-text .cursor {
+  display: inline-block; width: 2px; height: 1em; vertical-align: -3px;
+  background: var(--accent); margin-left: 2px;
+  animation: blink 1s steps(2) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+.idea-tally {
+  display: flex; align-items: center; gap: 10px; margin-top: 14px;
+  padding-top: 12px; border-top: 1px dashed rgba(255,255,255,.16);
+  font-family: "Geist Mono"; font-size: 10.5px; color: var(--ink-4);
+}
+.idea-tally b { color: var(--paper); font-weight: 600; }
 
-  /* ── Hero scaffold ─────────────────────────────────────────── */
-  .hero {
-    position: relative;
-    padding: clamp(36px, 6vw, 80px) var(--pad-x) clamp(40px, 6vw, 90px);
-    overflow: hidden;
-  }
-  .hero-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-    gap: clamp(32px, 5vw, 80px);
-    align-items: center;
-    max-width: 1380px; margin: 0 auto;
-  }
-  @media (max-width: 960px) { .hero-grid { grid-template-columns: 1fr; gap: 40px; } }
+/* connecting lines (svg) */
+.stage-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+.stage-svg path { stroke: var(--ink-4); stroke-dasharray: 3 4; fill: none; opacity: 0.6; }
+.stage-svg .pulse {
+  stroke: var(--accent); stroke-width: 2; fill: none; stroke-linecap: round;
+  stroke-dasharray: 6 200; stroke-dashoffset: 0;
+  animation: travel 3s linear infinite;
+}
+@keyframes travel { to { stroke-dashoffset: -206; } }
 
-  .eyebrow {
-    display: inline-flex; align-items: center; gap: 10px;
-    font-family: "Geist Mono"; font-size: 11.5px; color: var(--ink-3);
-    text-transform: uppercase; letter-spacing: 0.08em;
-    margin-bottom: 22px;
-  }
-  .eyebrow::before {
-    content: ""; width: 24px; height: 1px; background: var(--ink-3);
-  }
-  .h1 {
-    font-size: clamp(44px, 7vw, 96px);
-    line-height: 0.95;
-    letter-spacing: -0.035em;
-    font-weight: 600;
-    margin: 0 0 26px;
-    text-wrap: balance;
-  }
-  .h1 .strike { position: relative; white-space: nowrap; }
-  .h1 .strike::after {
-    content: ""; position: absolute; left: -2%; right: -2%; top: 56%;
-    height: 6px; background: var(--accent); transform: rotate(-1.5deg);
-    border-radius: 2px;
-  }
-  .h1 em { font-family: "Instrument Serif"; font-style: italic; font-weight: 400; letter-spacing: -0.01em; }
+/* corner artifacts */
+.corner {
+  position: absolute; font-family: "Geist Mono"; font-size: 10.5px;
+  color: var(--ink-3); display: flex; align-items: center; gap: 6px;
+  z-index: 2;
+}
+.corner .sq { width: 6px; height: 6px; background: var(--accent); }
 
-  .lede {
-    font-size: clamp(16px, 1.5vw, 19px);
-    line-height: 1.5; color: var(--ink-2);
-    max-width: 50ch; margin: 0 0 32px;
-  }
-  .lede b { font-weight: 600; color: var(--ink); }
+/* ── Variant: Conveyor ─────────────────────────────────────── */
+.conveyor { position: relative; width: 100%; height: 100%; }
+.conveyor-track {
+  position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%);
+  height: 90px;
+  background:
+    repeating-linear-gradient(90deg, var(--rule) 0 8px, transparent 8px 16px),
+    var(--paper);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  overflow: hidden;
+}
+.conveyor-track::before {
+  content: ""; position: absolute; inset: 0;
+  background: repeating-linear-gradient(45deg, transparent 0 14px, color-mix(in oklab, var(--rule) 60%, transparent) 14px 16px);
+  animation: slide 2s linear infinite;
+}
+@keyframes slide { to { transform: translateX(20px); } }
+.conveyor-stations {
+  position: relative; z-index: 2; display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 12px; padding: 0 10px; align-items: center; height: 100%;
+}
+.station { position: relative; }
+.station .agent { position: relative; width: 100%; max-width: 168px; margin: 0 auto; }
+.station::after {
+  content: ""; position: absolute; left: 50%; top: 56%; transform: translateX(-50%);
+  width: 1px; height: 22px; background: var(--ink-4);
+}
+.conveyor-tag {
+  position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+  font-family: "Geist Mono"; font-size: 9.5px; color: var(--ink-3);
+  background: var(--paper); padding: 2px 6px; border-radius: 4px;
+  border: 1px solid var(--rule); white-space: nowrap;
+}
+.conveyor-input, .conveyor-output {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: var(--ink); color: var(--paper);
+  padding: 14px 16px; border-radius: 12px;
+  font-family: "Geist Mono"; font-size: 11px;
+  z-index: 3; min-width: 110px;
+}
+.conveyor-input { left: -10px; }
+.conveyor-output { right: -10px; background: var(--accent); }
+.conveyor-input small, .conveyor-output small {
+  display: block; font-size: 9px; opacity: .6; letter-spacing: .08em;
+  text-transform: uppercase; margin-bottom: 4px;
+}
 
-  .cta-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-  .cta-meta { font-size: 12.5px; color: var(--ink-3); display: flex; align-items: center; gap: 8px; }
-  .cta-meta .check {
-    width: 14px; height: 14px; border-radius: 50%;
-    background: var(--ink); color: var(--paper);
-    display: grid; place-items: center; font-size: 9px;
-  }
+/* ── Variant: Roundtable ──────────────────────────────────── */
+.roundtable { position: relative; width: 100%; height: 100%; }
+.table-ring {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 78%; height: 78%; border-radius: 50%;
+  border: 1px dashed var(--rule-2);
+}
+.table-ring::before {
+  content: ""; position: absolute; inset: 14%; border-radius: 50%;
+  border: 1px solid var(--rule);
+  background: radial-gradient(circle, var(--accent-tint) 0%, transparent 70%);
+}
 
-  /* ── Hero stage (right column) ─────────────────────────────── */
-  .stage {
-    position: relative;
-    aspect-ratio: 1 / 1;
-    width: 100%;
-    max-width: 620px;
-    margin-left: auto;
-  }
+/* ── How it works ─────────────────────────────────────────── */
+.how {
+  padding: clamp(60px, 8vw, 120px) var(--pad-x);
+  border-top: 1px solid var(--rule);
+  background: var(--paper);
+}
+.how-inner { max-width: 1380px; margin: 0 auto; }
+.section-head {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  gap: 40px; margin-bottom: clamp(40px, 5vw, 70px);
+  border-bottom: 1px solid var(--rule); padding-bottom: 28px;
+}
+.section-h {
+  font-size: clamp(34px, 4vw, 56px);
+  line-height: 1; letter-spacing: -0.03em; font-weight: 600; margin: 0;
+  max-width: 18ch;
+}
+.section-h em { font-family: "Instrument Serif"; font-style: italic; font-weight: 400; }
+.section-meta {
+  font-family: "Geist Mono"; font-size: 11.5px; color: var(--ink-3);
+  flex-shrink: 0;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  display: flex !important; flex-direction: column !important; gap: 6px; align-items: flex-end;
+  line-height: 1.2;
+}
+.section-meta > * { display: block !important; width: 100%; text-align: right; white-space: nowrap; }
+.section-meta b { color: var(--ink); font-weight: 600; font-size: 13px; }
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+@media (max-width: 900px) { .steps { grid-template-columns: 1fr; } }
+.step {
+  padding: 32px 32px 36px;
+  border-right: 1px solid var(--rule);
+  position: relative;
+  display: flex; flex-direction: column; gap: 18px;
+}
+.step:last-child { border-right: 0; }
+@media (max-width: 900px) { .step { border-right: 0; border-bottom: 1px solid var(--rule); } .step:last-child { border-bottom: 0; } }
+.step-num {
+  font-family: "Geist Mono"; font-size: 11px; color: var(--ink-3);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.step-num b { color: var(--ink); font-weight: 600; font-size: 13px; }
+.step-art {
+  height: 200px;
+  border: 1px solid var(--rule); border-radius: 12px;
+  background: linear-gradient(180deg, color-mix(in oklab, var(--paper) 50%, white) 0%, var(--paper) 100%);
+  overflow: hidden; position: relative;
+}
+.step-h {
+  font-size: 24px; line-height: 1.1; letter-spacing: -0.02em;
+  font-weight: 600; margin: 0;
+}
+.step-p {
+  font-size: 14px; line-height: 1.5; color: var(--ink-2); margin: 0;
+  max-width: 36ch;
+}
 
-  /* shared agent card style */
-  .agent {
-    position: absolute;
-    width: 200px;
-    background: var(--paper);
-    border: 1px solid var(--rule);
-    border-radius: 14px;
-    padding: 22px 14px 13px;
-    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset, 0 12px 24px -16px rgba(14,13,11,.25);
-    transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .25s;
-  }
-  .agent:hover { transform: translate(var(--tx,0), var(--ty,0)) scale(1.04); z-index: 5; box-shadow: 0 1px 0 rgba(255,255,255,.8) inset, 0 16px 36px -14px rgba(14,13,11,.32); }
-  .agent.thinking { animation: float 5s ease-in-out infinite; }
-  @keyframes float {
-    0%, 100% { transform: translate(var(--tx,0), var(--ty,0)); }
-    50% { transform: translate(var(--tx,0), calc(var(--ty,0) - 6px)); }
-  }
-  .agent-row { display: flex; align-items: center; gap: 9px; margin-bottom: 9px; }
-  .agent-avatar {
-    width: 30px; height: 30px; border-radius: 8px;
-    display: grid; place-items: center;
-    font-family: "Geist Mono"; font-weight: 700; font-size: 13px;
-    flex-shrink: 0;
-  }
-  .agent-meta { min-width: 0; }
-  .agent-name { font-size: 13px; font-weight: 600; line-height: 1.1; letter-spacing: -0.01em; }
-  .agent-role { font-size: 10.5px; font-family: "Geist Mono"; color: var(--ink-3); margin-top: 2px; line-height: 1; }
-  .agent-quote {
-    font-size: 12px; line-height: 1.4; color: var(--ink-2);
-    border-top: 1px dashed var(--rule);
-    padding-top: 9px;
-    min-height: 50px;
-  }
-  .agent-quote::before { content: "“"; font-family: "Instrument Serif"; font-size: 18px; line-height: 0; vertical-align: -4px; color: var(--ink-3); margin-right: 2px; }
-  .agent-vote {
-    position: absolute; top: -11px; right: 12px;
-    background: var(--paper); border: 1px solid var(--rule);
-    border-radius: 999px; padding: 3px 9px;
-    font-family: "Geist Mono"; font-size: 10px; font-weight: 600;
-    color: var(--ink-2);
-    z-index: 2;
-    box-shadow: 0 4px 10px -4px rgba(14,13,11,.18);
-    line-height: 1.4;
-  }
-  .agent-vote.yes { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-  .agent-vote.no { background: var(--paper); color: var(--accent-ink); border-color: var(--accent); }
+/* step 1 art — typing input */
+.art-input {
+  position: absolute; left: 18px; right: 18px; top: 50%;
+  transform: translateY(-50%);
+  background: var(--paper); border: 1px solid var(--rule); border-radius: 10px;
+  padding: 10px 12px; box-shadow: 0 8px 20px -12px rgba(14,13,11,.2);
+}
+.art-input .lbl {
+  font-family: "Geist Mono"; font-size: 9.5px; letter-spacing: .08em;
+  color: var(--ink-3); text-transform: uppercase; margin-bottom: 5px;
+}
+.art-input .val { font-size: 13px; color: var(--ink); font-weight: 500; }
+.art-input .val .cursor { background: var(--accent); }
+.art-keys {
+  position: absolute; bottom: 14px; left: 18px; right: 18px;
+  display: flex; gap: 5px; flex-wrap: wrap;
+}
+.art-keys span {
+  font-family: "Geist Mono"; font-size: 9.5px; padding: 3px 7px;
+  background: var(--paper); border: 1px solid var(--rule); border-radius: 5px;
+  color: var(--ink-3);
+}
 
-  /* center idea card */
-  .idea {
-    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-    width: 56%; max-width: 280px;
-    background: var(--ink); color: var(--paper);
-    border-radius: 14px;
-    padding: 16px 16px 14px;
-    box-shadow: 0 24px 60px -24px rgba(14,13,11,.55);
-    z-index: 3;
-  }
-  .idea-label {
-    font-family: "Geist Mono"; font-size: 10.5px; letter-spacing: 0.08em;
-    color: var(--ink-4); text-transform: uppercase; margin-bottom: 8px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .idea-label .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
-  .idea-text {
-    font-size: 16px; line-height: 1.3; letter-spacing: -0.01em; font-weight: 500;
-  }
-  .idea-text .cursor {
-    display: inline-block; width: 2px; height: 1em; vertical-align: -3px;
-    background: var(--accent); margin-left: 2px;
-    animation: blink 1s steps(2) infinite;
-  }
-  @keyframes blink { 50% { opacity: 0; } }
-  .idea-tally {
-    display: flex; align-items: center; gap: 10px; margin-top: 14px;
-    padding-top: 12px; border-top: 1px dashed rgba(255,255,255,.16);
-    font-family: "Geist Mono"; font-size: 10.5px; color: var(--ink-4);
-  }
-  .idea-tally b { color: var(--paper); font-weight: 600; }
+/* step 2 art — debate */
+.art-debate { position: absolute; inset: 16px; display: flex; flex-direction: column; gap: 6px; }
+.bubble {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 11.5px;
+}
+.bubble .av {
+  width: 18px; height: 18px; border-radius: 5px;
+  display: grid; place-items: center;
+  font-family: "Geist Mono"; font-weight: 700; font-size: 9px;
+  flex-shrink: 0; color: var(--paper);
+}
+.bubble p {
+  margin: 0; padding: 5px 9px;
+  background: var(--paper); border: 1px solid var(--rule); border-radius: 8px;
+  color: var(--ink-2); line-height: 1.3;
+}
+.bubble .name { font-weight: 600; color: var(--ink); margin-right: 4px; }
 
-  /* connecting lines (svg) */
-  .stage-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
-  .stage-svg path { stroke: var(--ink-4); stroke-dasharray: 3 4; fill: none; opacity: 0.6; }
-  .stage-svg .pulse {
-    stroke: var(--accent); stroke-width: 2; fill: none; stroke-linecap: round;
-    stroke-dasharray: 6 200; stroke-dashoffset: 0;
-    animation: travel 3s linear infinite;
-  }
-  @keyframes travel { to { stroke-dashoffset: -206; } }
+/* step 3 art — verdict */
+.art-verdict {
+  position: absolute; inset: 0; display: grid; place-items: center;
+}
+.verdict-card {
+  width: 88%; background: var(--ink); color: var(--paper);
+  border-radius: 12px; padding: 14px;
+  box-shadow: 0 16px 40px -16px rgba(14,13,11,.5);
+}
+.verdict-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.verdict-name { white-space: nowrap; }
+.verdict-row + .verdict-row { margin-top: 10px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,.15); }
+.verdict-name { font-size: 11px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.verdict-vote {
+  font-family: "Geist Mono"; font-size: 10px; padding: 2px 8px;
+  border-radius: 999px; border: 1px solid rgba(255,255,255,.2);
+  white-space: nowrap; flex-shrink: 0;
+}
+.verdict-vote.yes { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+.verdict-tally {
+  margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.15);
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: "Geist Mono"; font-size: 10.5px; color: var(--ink-4);
+}
+.verdict-tally b { color: var(--paper); }
 
-  /* corner artifacts */
-  .corner {
-    position: absolute; font-family: "Geist Mono"; font-size: 10.5px;
-    color: var(--ink-3); display: flex; align-items: center; gap: 6px;
-    z-index: 2;
-  }
-  .corner .sq { width: 6px; height: 6px; background: var(--accent); }
+/* ── Pre-registration section ─────────────────────────────── */
+.prereg {
+  padding: clamp(48px, 6vw, 80px) var(--pad-x);
+  border-top: 1px solid var(--rule);
+  background: var(--paper);
+}
+.prereg-inner {
+  max-width: 1380px; margin: 0 auto;
+  display: flex; justify-content: space-between; align-items: flex-start;
+  gap: clamp(32px, 5vw, 80px);
+  flex-wrap: wrap;
+}
+.prereg-copy { flex: 1 1 300px; max-width: 480px; }
+.prereg-label {
+  font-family: "Geist Mono"; font-size: 11px; color: var(--ink-3);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+}
+.prereg-label::before { content: ""; width: 20px; height: 1px; background: var(--ink-3); }
+.prereg-h {
+  font-size: clamp(26px, 3vw, 38px); line-height: 1.1;
+  letter-spacing: -0.025em; font-weight: 600; margin: 0 0 12px;
+}
+.prereg-h em { font-family: "Instrument Serif"; font-style: italic; font-weight: 400; }
+.prereg-sub {
+  font-size: 14px; line-height: 1.6; color: var(--ink-2); margin: 0;
+}
+.prereg-form-wrap { flex: 1 1 320px; max-width: 440px; }
+.prereg-box {
+  background: var(--paper); border: 1px solid var(--rule);
+  border-radius: 14px; padding: 24px;
+  box-shadow: 0 1px 0 rgba(255,255,255,.8) inset, 0 8px 24px -16px rgba(14,13,11,.12);
+}
+.prereg-fields { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+.prereg-field {
+  display: flex; flex-direction: column; gap: 5px;
+}
+.prereg-field label {
+  font-family: "Geist Mono"; font-size: 10.5px; color: var(--ink-3);
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.prereg-field input {
+  appearance: none; border: 1px solid var(--rule);
+  border-radius: 8px; background: color-mix(in oklab, var(--paper) 60%, white);
+  font-family: inherit; font-size: 14px; color: var(--ink);
+  padding: 10px 12px; outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+.prereg-field input:focus {
+  border-color: var(--ink-3);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--ink) 8%, transparent);
+}
+.prereg-field input::placeholder { color: var(--ink-4); }
+.prereg-submit {
+  appearance: none; border: 0; cursor: pointer; width: 100%;
+  font-family: inherit; font-size: 13.5px; font-weight: 500;
+  padding: 11px 18px; border-radius: 9px;
+  background: var(--ink); color: var(--paper);
+  box-shadow: 0 1px 0 rgba(255,255,255,.12) inset, 0 4px 14px -6px rgba(14,13,11,.4);
+  transition: transform .15s, background .15s, opacity .15s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.prereg-submit:hover:not(:disabled) { transform: translateY(-1px); background: #1a1814; }
+.prereg-submit:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+.prereg-note {
+  margin-top: 11px; font-size: 11.5px; color: var(--ink-4);
+  font-family: "Geist Mono"; text-align: center;
+}
+.prereg-success {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px; padding: 28px 16px; text-align: center;
+}
+.prereg-success-icon {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: color-mix(in oklab, var(--green) 14%, transparent);
+  display: grid; place-items: center;
+  color: var(--green); font-size: 16px;
+}
+.prereg-success h4 {
+  margin: 0; font-size: 15px; font-weight: 600; letter-spacing: -0.01em;
+}
+.prereg-success p {
+  margin: 0; font-size: 12.5px; color: var(--ink-3); line-height: 1.5;
+}
+.prereg-err {
+  font-size: 12px; color: var(--accent-ink); font-family: "Geist Mono";
+  margin-top: 8px; text-align: center;
+}
 
-  /* ── Variant: Conveyor ─────────────────────────────────────── */
-  .conveyor { position: relative; width: 100%; height: 100%; }
-  .conveyor-track {
-    position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%);
-    height: 90px;
-    background:
-      repeating-linear-gradient(90deg, var(--rule) 0 8px, transparent 8px 16px),
-      var(--paper);
-    border-top: 1px solid var(--rule);
-    border-bottom: 1px solid var(--rule);
-    overflow: hidden;
-  }
-  .conveyor-track::before {
-    content: ""; position: absolute; inset: 0;
-    background: repeating-linear-gradient(45deg, transparent 0 14px, color-mix(in oklab, var(--rule) 60%, transparent) 14px 16px);
-    animation: slide 2s linear infinite;
-  }
-  @keyframes slide { to { transform: translateX(20px); } }
-  .conveyor-stations {
-    position: relative; z-index: 2; display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 12px; padding: 0 10px; align-items: center; height: 100%;
-  }
-  .station { position: relative; }
-  .station .agent { position: relative; width: 100%; max-width: 168px; margin: 0 auto; }
-  .station::after {
-    content: ""; position: absolute; left: 50%; top: 56%; transform: translateX(-50%);
-    width: 1px; height: 22px; background: var(--ink-4);
-  }
-  .conveyor-tag {
-    position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
-    font-family: "Geist Mono"; font-size: 9.5px; color: var(--ink-3);
-    background: var(--paper); padding: 2px 6px; border-radius: 4px;
-    border: 1px solid var(--rule); white-space: nowrap;
-  }
-  .conveyor-input, .conveyor-output {
-    position: absolute; top: 50%; transform: translateY(-50%);
-    background: var(--ink); color: var(--paper);
-    padding: 14px 16px; border-radius: 12px;
-    font-family: "Geist Mono"; font-size: 11px;
-    z-index: 3; min-width: 110px;
-  }
-  .conveyor-input { left: -10px; }
-  .conveyor-output { right: -10px; background: var(--accent); }
-  .conveyor-input small, .conveyor-output small {
-    display: block; font-size: 9px; opacity: .6; letter-spacing: .08em;
-    text-transform: uppercase; margin-bottom: 4px;
-  }
+/* footer */
+.foot {
+  padding: 60px var(--pad-x) 40px;
+  border-top: 1px solid var(--rule);
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 24px; flex-wrap: wrap;
+  font-size: 12px; color: var(--ink-3);
+}
+.foot .left { display: flex; align-items: center; gap: 12px; }
+.foot a { color: var(--ink-2); text-decoration: none; margin-left: 24px; }
+.foot a:hover { color: var(--ink); }
 
-  /* ── Variant: Roundtable ──────────────────────────────────── */
-  .roundtable { position: relative; width: 100%; height: 100%; }
-  .table-ring {
-    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-    width: 78%; height: 78%; border-radius: 50%;
-    border: 1px dashed var(--rule-2);
-  }
-  .table-ring::before {
-    content: ""; position: absolute; inset: 14%; border-radius: 50%;
-    border: 1px solid var(--rule);
-    background: radial-gradient(circle, var(--accent-tint) 0%, transparent 70%);
-  }
-
-  /* ── How it works ─────────────────────────────────────────── */
-  .how {
-    padding: clamp(60px, 8vw, 120px) var(--pad-x);
-    border-top: 1px solid var(--rule);
-    background: var(--paper);
-  }
-  .how-inner { max-width: 1380px; margin: 0 auto; }
-  .section-head {
-    display: flex; justify-content: space-between; align-items: flex-end;
-    gap: 40px; margin-bottom: clamp(40px, 5vw, 70px);
-    border-bottom: 1px solid var(--rule); padding-bottom: 28px;
-  }
-  .section-h {
-    font-size: clamp(34px, 4vw, 56px);
-    line-height: 1; letter-spacing: -0.03em; font-weight: 600; margin: 0;
-    max-width: 18ch;
-  }
-  .section-h em { font-family: "Instrument Serif"; font-style: italic; font-weight: 400; }
-  .section-meta {
-    font-family: "Geist Mono"; font-size: 11.5px; color: var(--ink-3);
-    flex-shrink: 0;
-    text-transform: uppercase; letter-spacing: 0.08em;
-    display: flex !important; flex-direction: column !important; gap: 6px; align-items: flex-end;
-    line-height: 1.2;
-  }
-  .section-meta > * { display: block !important; width: 100%; text-align: right; white-space: nowrap; }
-  .section-meta b { color: var(--ink); font-weight: 600; font-size: 13px; }
-
-  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
-  @media (max-width: 900px) { .steps { grid-template-columns: 1fr; } }
-  .step {
-    padding: 32px 32px 36px;
-    border-right: 1px solid var(--rule);
-    position: relative;
-    display: flex; flex-direction: column; gap: 18px;
-  }
-  .step:last-child { border-right: 0; }
-  @media (max-width: 900px) { .step { border-right: 0; border-bottom: 1px solid var(--rule); } .step:last-child { border-bottom: 0; } }
-  .step-num {
-    font-family: "Geist Mono"; font-size: 11px; color: var(--ink-3);
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .step-num b { color: var(--ink); font-weight: 600; font-size: 13px; }
-  .step-art {
-    height: 200px;
-    border: 1px solid var(--rule); border-radius: 12px;
-    background: linear-gradient(180deg, color-mix(in oklab, var(--paper) 50%, white) 0%, var(--paper) 100%);
-    overflow: hidden; position: relative;
-  }
-  .step-h {
-    font-size: 24px; line-height: 1.1; letter-spacing: -0.02em;
-    font-weight: 600; margin: 0;
-  }
-  .step-p {
-    font-size: 14px; line-height: 1.5; color: var(--ink-2); margin: 0;
-    max-width: 36ch;
-  }
-
-  /* step 1 art — typing input */
-  .art-input {
-    position: absolute; left: 18px; right: 18px; top: 50%;
-    transform: translateY(-50%);
-    background: var(--paper); border: 1px solid var(--rule); border-radius: 10px;
-    padding: 10px 12px; box-shadow: 0 8px 20px -12px rgba(14,13,11,.2);
-  }
-  .art-input .lbl {
-    font-family: "Geist Mono"; font-size: 9.5px; letter-spacing: .08em;
-    color: var(--ink-3); text-transform: uppercase; margin-bottom: 5px;
-  }
-  .art-input .val { font-size: 13px; color: var(--ink); font-weight: 500; }
-  .art-input .val .cursor { background: var(--accent); }
-  .art-keys {
-    position: absolute; bottom: 14px; left: 18px; right: 18px;
-    display: flex; gap: 5px; flex-wrap: wrap;
-  }
-  .art-keys span {
-    font-family: "Geist Mono"; font-size: 9.5px; padding: 3px 7px;
-    background: var(--paper); border: 1px solid var(--rule); border-radius: 5px;
-    color: var(--ink-3);
-  }
-
-  /* step 2 art — debate */
-  .art-debate { position: absolute; inset: 16px; display: flex; flex-direction: column; gap: 6px; }
-  .bubble {
-    display: flex; align-items: flex-start; gap: 8px;
-    font-size: 11.5px;
-  }
-  .bubble .av {
-    width: 18px; height: 18px; border-radius: 5px;
-    display: grid; place-items: center;
-    font-family: "Geist Mono"; font-weight: 700; font-size: 9px;
-    flex-shrink: 0; color: var(--paper);
-  }
-  .bubble p {
-    margin: 0; padding: 5px 9px;
-    background: var(--paper); border: 1px solid var(--rule); border-radius: 8px;
-    color: var(--ink-2); line-height: 1.3;
-  }
-  .bubble .name { font-weight: 600; color: var(--ink); margin-right: 4px; }
-
-  /* step 3 art — verdict */
-  .art-verdict {
-    position: absolute; inset: 0; display: grid; place-items: center;
-  }
-  .verdict-card {
-    width: 88%; background: var(--ink); color: var(--paper);
-    border-radius: 12px; padding: 14px;
-    box-shadow: 0 16px 40px -16px rgba(14,13,11,.5);
-  }
-  .verdict-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-  .verdict-name { white-space: nowrap; }
-  .verdict-row + .verdict-row { margin-top: 10px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,.15); }
-  .verdict-name { font-size: 11px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
-  .verdict-vote {
-    font-family: "Geist Mono"; font-size: 10px; padding: 2px 8px;
-    border-radius: 999px; border: 1px solid rgba(255,255,255,.2);
-    white-space: nowrap; flex-shrink: 0;
-  }
-  .verdict-vote.yes { background: var(--accent); border-color: var(--accent); color: var(--paper); }
-  .verdict-tally {
-    margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.15);
-    display: flex; justify-content: space-between; align-items: center;
-    font-family: "Geist Mono"; font-size: 10.5px; color: var(--ink-4);
-  }
-  .verdict-tally b { color: var(--paper); }
-
-  /* footer */
-  .foot {
-    padding: 60px var(--pad-x) 40px;
-    border-top: 1px solid var(--rule);
-    display: flex; justify-content: space-between; align-items: center;
-    gap: 24px; flex-wrap: wrap;
-    font-size: 12px; color: var(--ink-3);
-  }
-  .foot .left { display: flex; align-items: center; gap: 12px; }
-  .foot a { color: var(--ink-2); text-decoration: none; margin-left: 24px; }
-  .foot a:hover { color: var(--ink); }
-
-  /* ── Density ──────────────────────────────────────────────── */
-  [data-density="compact"] .hero { padding-top: 28px; padding-bottom: 36px; }
-  [data-density="compact"] .h1 { font-size: clamp(38px, 6vw, 78px); margin-bottom: 18px; }
-  [data-density="compact"] .lede { margin-bottom: 22px; }
-  [data-density="compact"] .how { padding: 60px var(--pad-x); }
-  [data-density="compact"] .step { padding: 22px 22px 26px; gap: 12px; }
-  [data-density="compact"] .step-art { height: 160px; }
-  [data-density="compact"] .agent { width: 184px; padding: 20px 12px 11px; }
-
-  [data-density="spacious"] .hero { padding-top: 90px; padding-bottom: 100px; }
-  [data-density="spacious"] .h1 { font-size: clamp(50px, 8vw, 110px); margin-bottom: 30px; }
-  [data-density="spacious"] .step { padding: 44px 40px 48px; gap: 22px; }
-  [data-density="spacious"] .step-art { height: 240px; }
+/* ── Density ──────────────────────────────────────────────── */
+[data-density="compact"] .hero { padding-top: 28px; padding-bottom: 36px; }
+[data-density="compact"] .h1 { font-size: clamp(38px, 6vw, 78px); margin-bottom: 18px; }
+[data-density="compact"] .lede { margin-bottom: 22px; }
+[data-density="compact"] .how { padding: 60px var(--pad-x); }
+[data-density="compact"] .step { padding: 22px 22px 26px; gap: 12px; }
+[data-density="compact"] .step-art { height: 160px; }
+[data-density="compact"] .agent { width: 184px; padding: 20px 12px 11px; }
+[data-density="spacious"] .hero { padding-top: 90px; padding-bottom: 100px; }
+[data-density="spacious"] .h1 { font-size: clamp(50px, 8vw, 110px); margin-bottom: 30px; }
+[data-density="spacious"] .step { padding: 44px 40px 48px; gap: 22px; }
+[data-density="spacious"] .step-art { height: 240px; }
 </style>
 </head>
 <body>
@@ -496,151 +575,74 @@
 
 <div id="root"></div>
 
-
 <script type="text/babel" data-presets="react">
 
-// tweaks-panel.jsx
-// Reusable Tweaks shell + form-control helpers.
-//
-// Owns the host protocol (listens for __activate_edit_mode / __deactivate_edit_mode,
-// posts __edit_mode_available / __edit_mode_set_keys / __edit_mode_dismissed) so
-// individual prototypes don't re-roll it. Ships a consistent set of controls so you
-// don't hand-draw <input type="range">, segmented radios, steppers, etc.
-//
-// Usage (in an HTML file that loads React + Babel):
-//
-//   const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-//     "primaryColor": "#D97757",
-//     "fontSize": 16,
-//     "density": "regular",
-//     "dark": false
-//   }/*EDITMODE-END*/;
-//
-//   function App() {
-//     const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
-//     return (
-//       <div style={{ fontSize: t.fontSize, color: t.primaryColor }}>
-//         Hello
-//         <TweaksPanel>
-//           <TweakSection label="Typography" />
-//           <TweakSlider label="Font size" value={t.fontSize} min={10} max={32} unit="px"
-//                        onChange={(v) => setTweak('fontSize', v)} />
-//           <TweakRadio  label="Density" value={t.density}
-//                        options={['compact', 'regular', 'comfy']}
-//                        onChange={(v) => setTweak('density', v)} />
-//           <TweakSection label="Theme" />
-//           <TweakColor  label="Primary" value={t.primaryColor}
-//                        onChange={(v) => setTweak('primaryColor', v)} />
-//           <TweakToggle label="Dark mode" value={t.dark}
-//                        onChange={(v) => setTweak('dark', v)} />
-//         </TweaksPanel>
-//       </div>
-//     );
-//   }
-//
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── Supabase config ────────────────────────────────────────
+// Replace these with your actual Supabase project values.
+// You can find them in: Supabase dashboard → Project Settings → API
+const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
+const SUPABASE_ANON_KEY = "YOUR_ANON_PUBLIC_KEY";
 
+async function insertPreregistration({ name, email, phone }) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/preregistrations`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "apikey": SUPABASE_ANON_KEY,
+      "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+      "Prefer": "return=minimal",
+    },
+    body: JSON.stringify({ name, email, phone }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || err.details || "Something went wrong.");
+  }
+}
+
+// ─── TweaksPanel (inline) ───────────────────────────────────
 const __TWEAKS_STYLE = `
-  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
-    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
-    background:rgba(250,249,247,.78);color:#29261b;
-    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
-    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
-    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
-    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
-  .twk-hd{display:flex;align-items:center;justify-content:space-between;
-    padding:10px 8px 10px 14px;cursor:move;user-select:none}
-  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
-  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
-    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
-  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
-  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
-    overflow-y:auto;overflow-x:hidden;min-height:0;
-    scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
-  .twk-body::-webkit-scrollbar{width:8px}
-  .twk-body::-webkit-scrollbar-track{background:transparent;margin:2px}
-  .twk-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:4px;
-    border:2px solid transparent;background-clip:content-box}
-  .twk-body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.25);
-    border:2px solid transparent;background-clip:content-box}
-  .twk-row{display:flex;flex-direction:column;gap:5px}
-  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
-  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;
-    color:rgba(41,38,27,.72)}
-  .twk-lbl>span:first-child{font-weight:500}
-  .twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
-
-  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
-    color:rgba(41,38,27,.45);padding:10px 0 0}
-  .twk-sect:first-child{padding-top:0}
-
-  .twk-field{appearance:none;width:100%;height:26px;padding:0 8px;
-    border:.5px solid rgba(0,0,0,.1);border-radius:7px;
-    background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
-  .twk-field:focus{border-color:rgba(0,0,0,.25);background:rgba(255,255,255,.85)}
-  select.twk-field{padding-right:22px;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
-    background-repeat:no-repeat;background-position:right 8px center}
-
-  .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
-    border-radius:999px;background:rgba(0,0,0,.12);outline:none}
-  .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
-    width:14px;height:14px;border-radius:50%;background:#fff;
-    border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
-  .twk-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
-    background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
-
-  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
-    background:rgba(0,0,0,.06);user-select:none}
-  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
-    background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
-    transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
-  .twk-seg.dragging .twk-seg-thumb{transition:none}
-  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
-    background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
-    border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2;
-    overflow-wrap:anywhere}
-
-  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
-    background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
-  .twk-toggle[data-on="1"]{background:#34c759}
-  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
-    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
-  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
-
-  .twk-num{display:flex;align-items:center;height:26px;padding:0 0 0 8px;
-    border:.5px solid rgba(0,0,0,.1);border-radius:7px;background:rgba(255,255,255,.6)}
-  .twk-num-lbl{font-weight:500;color:rgba(41,38,27,.6);cursor:ew-resize;
-    user-select:none;padding-right:8px}
-  .twk-num input{flex:1;min-width:0;height:100%;border:0;background:transparent;
-    font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 8px 0 0;
-    outline:none;color:inherit;-moz-appearance:textfield}
-  .twk-num input::-webkit-inner-spin-button,.twk-num input::-webkit-outer-spin-button{
-    -webkit-appearance:none;margin:0}
-  .twk-num-unit{padding-right:8px;color:rgba(41,38,27,.45)}
-
-  .twk-btn{appearance:none;height:26px;padding:0 12px;border:0;border-radius:7px;
-    background:rgba(0,0,0,.78);color:#fff;font:inherit;font-weight:500;cursor:default}
-  .twk-btn:hover{background:rgba(0,0,0,.88)}
-  .twk-btn.secondary{background:rgba(0,0,0,.06);color:inherit}
-  .twk-btn.secondary:hover{background:rgba(0,0,0,.1)}
-
-  .twk-swatch{appearance:none;-webkit-appearance:none;width:56px;height:22px;
-    border:.5px solid rgba(0,0,0,.1);border-radius:6px;padding:0;cursor:default;
-    background:transparent;flex-shrink:0}
-  .twk-swatch::-webkit-color-swatch-wrapper{padding:0}
-  .twk-swatch::-webkit-color-swatch{border:0;border-radius:5.5px}
-  .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
+.twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
+max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+background:rgba(250,249,247,.78);color:#29261b;
+-webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+border:.5px solid rgba(255,255,255,.6);border-radius:14px;
+box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
+font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+.twk-hd{display:flex;align-items:center;justify-content:space-between;
+padding:10px 8px 10px 14px;cursor:move;user-select:none}
+.twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+.twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
+width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+.twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+.twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+overflow-y:auto;overflow-x:hidden;min-height:0;scrollbar-width:thin}
+.twk-row{display:flex;flex-direction:column;gap:5px}
+.twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+.twk-lbl{display:flex;justify-content:space-between;align-items:baseline;color:rgba(41,38,27,.72)}
+.twk-lbl>span:first-child{font-weight:500}
+.twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
+.twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+color:rgba(41,38,27,.45);padding:10px 0 0}
+.twk-sect:first-child{padding-top:0}
+.twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
+background:rgba(0,0,0,.06);user-select:none}
+.twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
+background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
+transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+.twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
+background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
+border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2}
+.twk-swatch{appearance:none;-webkit-appearance:none;width:56px;height:22px;
+border:.5px solid rgba(0,0,0,.1);border-radius:6px;padding:0;cursor:default;
+background:transparent;flex-shrink:0}
+.twk-swatch::-webkit-color-swatch-wrapper{padding:0}
+.twk-swatch::-webkit-color-swatch{border:0;border-radius:5.5px}
+.twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
 `;
 
-// ── useTweaks ───────────────────────────────────────────────────────────────
-// Single source of truth for tweak values. setTweak persists via the host
-// (__edit_mode_set_keys → host rewrites the EDITMODE block on disk).
 function useTweaks(defaults) {
   const [values, setValues] = React.useState(defaults);
-  // Accepts either setTweak('key', value) or setTweak({ key: value, ... }) so a
-  // useState-style call doesn't write a "[object Object]" key into the persisted
-  // JSON block.
   const setTweak = React.useCallback((keyOrEdits, val) => {
     const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
       ? keyOrEdits : { [keyOrEdits]: val };
@@ -650,19 +652,11 @@ function useTweaks(defaults) {
   return [values, setTweak];
 }
 
-// ── TweaksPanel ─────────────────────────────────────────────────────────────
-// Floating shell. Registers the protocol listener BEFORE announcing
-// availability — if the announce ran first, the host's activate could land
-// before our handler exists and the toolbar toggle would silently no-op.
-// The close button posts __edit_mode_dismissed so the host's toolbar toggle
-// flips off in lockstep; the host echoes __deactivate_edit_mode back which
-// is what actually hides the panel.
 function TweaksPanel({ title = 'Tweaks', children }) {
   const [open, setOpen] = React.useState(false);
   const dragRef = React.useRef(null);
   const offsetRef = React.useRef({ x: 16, y: 16 });
   const PAD = 16;
-
   const clampToViewport = React.useCallback(() => {
     const panel = dragRef.current;
     if (!panel) return;
@@ -676,19 +670,14 @@ function TweaksPanel({ title = 'Tweaks', children }) {
     panel.style.right = offsetRef.current.x + 'px';
     panel.style.bottom = offsetRef.current.y + 'px';
   }, []);
-
   React.useEffect(() => {
     if (!open) return;
     clampToViewport();
-    if (typeof ResizeObserver === 'undefined') {
-      window.addEventListener('resize', clampToViewport);
-      return () => window.removeEventListener('resize', clampToViewport);
-    }
-    const ro = new ResizeObserver(clampToViewport);
-    ro.observe(document.documentElement);
-    return () => ro.disconnect();
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(clampToViewport) : null;
+    if (ro) { ro.observe(document.documentElement); return () => ro.disconnect(); }
+    window.addEventListener('resize', clampToViewport);
+    return () => window.removeEventListener('resize', clampToViewport);
   }, [open, clampToViewport]);
-
   React.useEffect(() => {
     const onMsg = (e) => {
       const t = e?.data?.type;
@@ -699,303 +688,132 @@ function TweaksPanel({ title = 'Tweaks', children }) {
     window.parent.postMessage({ type: '__edit_mode_available' }, '*');
     return () => window.removeEventListener('message', onMsg);
   }, []);
-
-  const dismiss = () => {
-    setOpen(false);
-    window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
-  };
-
+  const dismiss = () => { setOpen(false); window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*'); };
   const onDragStart = (e) => {
-    const panel = dragRef.current;
-    if (!panel) return;
+    const panel = dragRef.current; if (!panel) return;
     const r = panel.getBoundingClientRect();
     const sx = e.clientX, sy = e.clientY;
-    const startRight = window.innerWidth - r.right;
-    const startBottom = window.innerHeight - r.bottom;
+    const startRight = window.innerWidth - r.right, startBottom = window.innerHeight - r.bottom;
     const move = (ev) => {
-      offsetRef.current = {
-        x: startRight - (ev.clientX - sx),
-        y: startBottom - (ev.clientY - sy),
-      };
+      offsetRef.current = { x: startRight - (ev.clientX - sx), y: startBottom - (ev.clientY - sy) };
       clampToViewport();
     };
-    const up = () => {
-      window.removeEventListener('mousemove', move);
-      window.removeEventListener('mouseup', up);
-    };
-    window.addEventListener('mousemove', move);
-    window.addEventListener('mouseup', up);
+    const up = () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
+    window.addEventListener('mousemove', move); window.addEventListener('mouseup', up);
   };
-
   if (!open) return null;
   return (
     <>
       <style>{__TWEAKS_STYLE}</style>
-      <div ref={dragRef} className="twk-panel" data-noncommentable=""
-           style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+      <div ref={dragRef} className="twk-panel" style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
         <div className="twk-hd" onMouseDown={onDragStart}>
           <b>{title}</b>
-          <button className="twk-x" aria-label="Close tweaks"
-                  onMouseDown={(e) => e.stopPropagation()}
-                  onClick={dismiss}>✕</button>
+          <button className="twk-x" onMouseDown={(e) => e.stopPropagation()} onClick={dismiss}>✕</button>
         </div>
         <div className="twk-body">{children}</div>
       </div>
     </>
   );
 }
-
-// ── Layout helpers ──────────────────────────────────────────────────────────
-
-function TweakSection({ label, children }) {
-  return (
-    <>
-      <div className="twk-sect">{label}</div>
-      {children}
-    </>
-  );
-}
-
-function TweakRow({ label, value, children, inline = false }) {
-  return (
-    <div className={inline ? 'twk-row twk-row-h' : 'twk-row'}>
-      <div className="twk-lbl">
-        <span>{label}</span>
-        {value != null && <span className="twk-val">{value}</span>}
-      </div>
-      {children}
-    </div>
-  );
-}
-
-// ── Controls ────────────────────────────────────────────────────────────────
-
-function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', onChange }) {
-  return (
-    <TweakRow label={label} value={`${value}${unit}`}>
-      <input type="range" className="twk-slider" min={min} max={max} step={step}
-             value={value} onChange={(e) => onChange(Number(e.target.value))} />
-    </TweakRow>
-  );
-}
-
-function TweakToggle({ label, value, onChange }) {
-  return (
-    <div className="twk-row twk-row-h">
-      <div className="twk-lbl"><span>{label}</span></div>
-      <button type="button" className="twk-toggle" data-on={value ? '1' : '0'}
-              role="switch" aria-checked={!!value}
-              onClick={() => onChange(!value)}><i /></button>
-    </div>
-  );
-}
-
+function TweakSection({ label }) { return <div className="twk-sect">{label}</div>; }
 function TweakRadio({ label, value, options, onChange }) {
   const trackRef = React.useRef(null);
   const [dragging, setDragging] = React.useState(false);
   const opts = options.map((o) => (typeof o === 'object' ? o : { value: o, label: o }));
   const idx = Math.max(0, opts.findIndex((o) => o.value === value));
   const n = opts.length;
-
-  // The active value is read by pointer-move handlers attached for the lifetime
-  // of a drag — ref it so a stale closure doesn't fire onChange for every move.
-  const valueRef = React.useRef(value);
-  valueRef.current = value;
-
+  const valueRef = React.useRef(value); valueRef.current = value;
   const segAt = (clientX) => {
     const r = trackRef.current.getBoundingClientRect();
-    const inner = r.width - 4;
-    const i = Math.floor(((clientX - r.left - 2) / inner) * n);
+    const i = Math.floor(((clientX - r.left - 2) / (r.width - 4)) * n);
     return opts[Math.max(0, Math.min(n - 1, i))].value;
   };
-
   const onPointerDown = (e) => {
     setDragging(true);
-    const v0 = segAt(e.clientX);
-    if (v0 !== valueRef.current) onChange(v0);
-    const move = (ev) => {
-      if (!trackRef.current) return;
-      const v = segAt(ev.clientX);
-      if (v !== valueRef.current) onChange(v);
-    };
-    const up = () => {
-      setDragging(false);
-      window.removeEventListener('pointermove', move);
-      window.removeEventListener('pointerup', up);
-    };
-    window.addEventListener('pointermove', move);
-    window.addEventListener('pointerup', up);
+    const v0 = segAt(e.clientX); if (v0 !== valueRef.current) onChange(v0);
+    const move = (ev) => { if (trackRef.current) { const v = segAt(ev.clientX); if (v !== valueRef.current) onChange(v); } };
+    const up = () => { setDragging(false); window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); };
+    window.addEventListener('pointermove', move); window.addEventListener('pointerup', up);
   };
-
   return (
-    <TweakRow label={label}>
-      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown}
-           className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
-        <div className="twk-seg-thumb"
-             style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`,
-                      width: `calc((100% - 4px) / ${n})` }} />
-        {opts.map((o) => (
-          <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>
-            {o.label}
-          </button>
-        ))}
+    <div className="twk-row">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown} className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
+        <div className="twk-seg-thumb" style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`, width: `calc((100% - 4px) / ${n})` }} />
+        {opts.map((o) => <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>{o.label}</button>)}
       </div>
-    </TweakRow>
-  );
-}
-
-function TweakSelect({ label, value, options, onChange }) {
-  return (
-    <TweakRow label={label}>
-      <select className="twk-field" value={value} onChange={(e) => onChange(e.target.value)}>
-        {options.map((o) => {
-          const v = typeof o === 'object' ? o.value : o;
-          const l = typeof o === 'object' ? o.label : o;
-          return <option key={v} value={v}>{l}</option>;
-        })}
-      </select>
-    </TweakRow>
-  );
-}
-
-function TweakText({ label, value, placeholder, onChange }) {
-  return (
-    <TweakRow label={label}>
-      <input className="twk-field" type="text" value={value} placeholder={placeholder}
-             onChange={(e) => onChange(e.target.value)} />
-    </TweakRow>
-  );
-}
-
-function TweakNumber({ label, value, min, max, step = 1, unit = '', onChange }) {
-  const clamp = (n) => {
-    if (min != null && n < min) return min;
-    if (max != null && n > max) return max;
-    return n;
-  };
-  const startRef = React.useRef({ x: 0, val: 0 });
-  const onScrubStart = (e) => {
-    e.preventDefault();
-    startRef.current = { x: e.clientX, val: value };
-    const decimals = (String(step).split('.')[1] || '').length;
-    const move = (ev) => {
-      const dx = ev.clientX - startRef.current.x;
-      const raw = startRef.current.val + dx * step;
-      const snapped = Math.round(raw / step) * step;
-      onChange(clamp(Number(snapped.toFixed(decimals))));
-    };
-    const up = () => {
-      window.removeEventListener('pointermove', move);
-      window.removeEventListener('pointerup', up);
-    };
-    window.addEventListener('pointermove', move);
-    window.addEventListener('pointerup', up);
-  };
-  return (
-    <div className="twk-num">
-      <span className="twk-num-lbl" onPointerDown={onScrubStart}>{label}</span>
-      <input type="number" value={value} min={min} max={max} step={step}
-             onChange={(e) => onChange(clamp(Number(e.target.value)))} />
-      {unit && <span className="twk-num-unit">{unit}</span>}
     </div>
   );
 }
-
 function TweakColor({ label, value, onChange }) {
   return (
     <div className="twk-row twk-row-h">
       <div className="twk-lbl"><span>{label}</span></div>
-      <input type="color" className="twk-swatch" value={value}
-             onChange={(e) => onChange(e.target.value)} />
+      <input type="color" className="twk-swatch" value={value} onChange={(e) => onChange(e.target.value)} />
     </div>
   );
 }
-
-function TweakButton({ label, onClick, secondary = false }) {
-  return (
-    <button type="button" className={secondary ? 'twk-btn secondary' : 'twk-btn'}
-            onClick={onClick}>{label}</button>
-  );
-}
-
-Object.assign(window, {
-  useTweaks, TweaksPanel, TweakSection, TweakRow,
-  TweakSlider, TweakToggle, TweakRadio, TweakSelect,
-  TweakText, TweakNumber, TweakColor, TweakButton,
-});
+Object.assign(window, { useTweaks, TweaksPanel, TweakSection, TweakRadio, TweakColor });
 
 </script>
+
 <script type="text/babel" data-presets="react">
-// hero.jsx — ShipMyBuild hero. Three variants:
-//   "council"   — 4 agents around a central idea card (default)
-//   "conveyor"  — agents on an assembly line
-//   "roundtable"— agents around a circular table
 
-// IDEA_SETS — each idea generates its OWN custom 4-agent council.
-// The agents (names, roles, expertise, quotes) are tuned to the specific SaaS.
+// ─── hero.jsx ───────────────────────────────────────────────
 const COLORS = {
-  red:    'oklch(0.66 0.19 32)',
-  blue:   'oklch(0.62 0.17 250)',
-  violet: 'oklch(0.6 0.18 300)',
-  green:  'oklch(0.55 0.14 145)',
-  amber:  'oklch(0.7 0.16 70)',
-  teal:   'oklch(0.6 0.13 200)',
-  pink:   'oklch(0.7 0.17 0)',
+  red: 'oklch(0.66 0.19 32)', blue: 'oklch(0.62 0.17 250)',
+  violet: 'oklch(0.6 0.18 300)', green: 'oklch(0.55 0.14 145)',
+  amber: 'oklch(0.7 0.16 70)',
 };
-
 const IDEA_SETS = [
   {
     idea: 'whatsapp CRM for kiranas',
     tally: { yes: 3, no: 1, time: '4.2s' },
     agents: [
-      { short: 'GS', name: 'GST Auditor',     role: 'Tax · Compliance',   tone: 'no',  color: COLORS.red,    quote: "GST e-invoicing for SMBs is messy. Have we costed it?" },
-      { short: 'WA', name: 'Whatsapp Native', role: 'Stack · BSP',        tone: 'yes', color: COLORS.green,  quote: "Use Gupshup BSP. Two-day v1, ₹0.42/msg." },
-      { short: 'KR', name: 'Kirana Whisperer',role: 'GTM · Tier-2',       tone: 'yes', color: COLORS.violet, quote: "30 stores in Indiranagar. Pilot in 6 days." },
-      { short: '₹A', name: 'Unit Economist',   role: 'Pricing · LTV',     tone: 'yes', color: COLORS.blue,   quote: "₹499/mo. Payback in 3 months on referrals alone." },
+      { short: 'GS', name: 'GST Auditor', role: 'Tax · Compliance', tone: 'no', color: COLORS.red, quote: "GST e-invoicing for SMBs is messy. Have we costed it?" },
+      { short: 'WA', name: 'Whatsapp Native', role: 'Stack · BSP', tone: 'yes', color: COLORS.green, quote: "Use Gupshup BSP. Two-day v1, ₹0.42/msg." },
+      { short: 'KR', name: 'Kirana Whisperer', role: 'GTM · Tier-2', tone: 'yes', color: COLORS.violet, quote: "30 stores in Indiranagar. Pilot in 6 days." },
+      { short: '₹A', name: 'Unit Economist', role: 'Pricing · LTV', tone: 'yes', color: COLORS.blue, quote: "₹499/mo. Payback in 3 months on referrals alone." },
     ],
   },
   {
     idea: 'AI tutor for JEE prep',
     tally: { yes: 2, no: 2, time: '5.1s' },
     agents: [
-      { short: 'KO', name: 'Kota Veteran',    role: 'Curriculum · Edge',   tone: 'no',  color: COLORS.red,   quote: "Allen, Aakash, PW already do this. What's the wedge?" },
-      { short: 'RG', name: 'RAG Specialist',  role: 'Stack · LLM',         tone: 'yes', color: COLORS.blue,  quote: "Past 10y JEE qbank as RAG. ₹3.20/student/day." },
-      { short: 'PA', name: 'Parent Persuader',role: 'GTM · Trust',         tone: 'no',  color: COLORS.violet,quote: "Parents pay tutors, not apps. CAC will hurt." },
-      { short: '₹S', name: 'EdTech Pricer',   role: 'Pricing · Cohorts',   tone: 'yes', color: COLORS.green, quote: "₹1,499/mo with score guarantee. Done." },
+      { short: 'KO', name: 'Kota Veteran', role: 'Curriculum · Edge', tone: 'no', color: COLORS.red, quote: "Allen, Aakash, PW already do this. What's the wedge?" },
+      { short: 'RG', name: 'RAG Specialist', role: 'Stack · LLM', tone: 'yes', color: COLORS.blue, quote: "Past 10y JEE qbank as RAG. ₹3.20/student/day." },
+      { short: 'PA', name: 'Parent Persuader', role: 'GTM · Trust', tone: 'no', color: COLORS.violet, quote: "Parents pay tutors, not apps. CAC will hurt." },
+      { short: '₹S', name: 'EdTech Pricer', role: 'Pricing · Cohorts', tone: 'yes', color: COLORS.green, quote: "₹1,499/mo with score guarantee. Done." },
     ],
   },
   {
     idea: 'expense tracker for indie devs',
     tally: { yes: 3, no: 1, time: '3.8s' },
     agents: [
-      { short: 'TX', name: 'Deduction Hawk',  role: '44ADA · GST',          tone: 'yes', color: COLORS.green, quote: "Auto-classify under 44ADA. Saves 18 hrs/year." },
-      { short: 'ST', name: 'Stripe Plumber',  role: 'Stack · Payouts',     tone: 'yes', color: COLORS.blue,  quote: "Plaid for INR doesn't exist. Use Setu + Razorpay." },
-      { short: 'DB', name: 'Dev DM Hustler',  role: 'GTM · Communities',   tone: 'yes', color: COLORS.violet,quote: "Indie Hackers India + r/indiehackers. Free." },
-      { short: 'MO', name: 'Moat Skeptic',    role: 'Defense · Wedge',     tone: 'no',  color: COLORS.red,   quote: "QuickBooks + Notion = $0. Why pay for this?" },
+      { short: 'TX', name: 'Deduction Hawk', role: '44ADA · GST', tone: 'yes', color: COLORS.green, quote: "Auto-classify under 44ADA. Saves 18 hrs/year." },
+      { short: 'ST', name: 'Stripe Plumber', role: 'Stack · Payouts', tone: 'yes', color: COLORS.blue, quote: "Plaid for INR doesn't exist. Use Setu + Razorpay." },
+      { short: 'DB', name: 'Dev DM Hustler', role: 'GTM · Communities', tone: 'yes', color: COLORS.violet, quote: "Indie Hackers India + r/indiehackers. Free." },
+      { short: 'MO', name: 'Moat Skeptic', role: 'Defense · Wedge', tone: 'no', color: COLORS.red, quote: "QuickBooks + Notion = $0. Why pay for this?" },
     ],
   },
   {
     idea: 'invoice OCR for chartered accts',
     tally: { yes: 4, no: 0, time: '2.9s' },
     agents: [
-      { short: 'CA', name: 'CA Insider',      role: 'ICAI · Workflow',     tone: 'yes', color: COLORS.blue,  quote: "Tally import is the killer feature. Just that." },
-      { short: 'OC', name: 'OCR Engineer',    role: 'Stack · Vision',      tone: 'yes', color: COLORS.green, quote: "Tesseract + GPT-4o vision. 98.2% on Hindi GST." },
-      { short: 'FI', name: 'Firm Closer',     role: 'GTM · B2B Sales',     tone: 'yes', color: COLORS.violet,quote: "Pune + Mumbai CA firms. WhatsApp outreach works." },
-      { short: '₹L', name: 'License Pricer',  role: 'Pricing · Per-seat',  tone: 'yes', color: COLORS.amber, quote: "₹2,999/seat/mo. CA firms expense it pre-tax." },
+      { short: 'CA', name: 'CA Insider', role: 'ICAI · Workflow', tone: 'yes', color: COLORS.blue, quote: "Tally import is the killer feature. Just that." },
+      { short: 'OC', name: 'OCR Engineer', role: 'Stack · Vision', tone: 'yes', color: COLORS.green, quote: "Tesseract + GPT-4o vision. 98.2% on Hindi GST." },
+      { short: 'FI', name: 'Firm Closer', role: 'GTM · B2B Sales', tone: 'yes', color: COLORS.violet, quote: "Pune + Mumbai CA firms. WhatsApp outreach works." },
+      { short: '₹L', name: 'License Pricer', role: 'Pricing · Per-seat', tone: 'yes', color: COLORS.amber, quote: "₹2,999/seat/mo. CA firms expense it pre-tax." },
     ],
   },
 ];
-
-// Default exposed AGENTS = first set (used for static views like step bubbles)
 const AGENTS = IDEA_SETS[0].agents.map((a, i) => ({ ...a, id: 'a' + i }));
 
-// Typewriter — cycles through prompts
 function useTypewriter(phrases, speed = 38, hold = 1600) {
   const [text, setText] = React.useState('');
   const idx = React.useRef(0);
   const pos = React.useRef(0);
   const dir = React.useRef(1);
-
   React.useEffect(() => {
     let t;
     const tick = () => {
@@ -1003,30 +821,24 @@ function useTypewriter(phrases, speed = 38, hold = 1600) {
       pos.current += dir.current;
       setText(phrase.slice(0, pos.current));
       if (dir.current === 1 && pos.current >= phrase.length) {
-        dir.current = 0;
-        t = setTimeout(() => { dir.current = -1; tick(); }, hold);
-        return;
+        dir.current = 0; t = setTimeout(() => { dir.current = -1; tick(); }, hold); return;
       }
       if (dir.current === -1 && pos.current <= 0) {
-        dir.current = 1;
-        idx.current = (idx.current + 1) % phrases.length;
+        dir.current = 1; idx.current = (idx.current + 1) % phrases.length;
       }
       t = setTimeout(tick, dir.current === -1 ? speed * 0.5 : speed);
     };
     t = setTimeout(tick, 600);
     return () => clearTimeout(t);
   }, []);
-
   return text;
 }
 
-// Avatar pill (used in agent card + step bubbles)
 function AgentAvatar({ agent, size = 30 }) {
   return (
     <div className="agent-avatar" style={{
       background: `color-mix(in oklab, ${agent.color} 18%, transparent)`,
-      color: agent.color, width: size, height: size,
-      fontSize: size * 0.42,
+      color: agent.color, width: size, height: size, fontSize: size * 0.42,
     }}>{agent.short}</div>
   );
 }
@@ -1042,168 +854,99 @@ function AgentCard({ agent, vote, style, thinking }) {
           <div className="agent-role">{agent.role}</div>
         </div>
       </div>
-      <div className="agent-quote">{agent.quote}”</div>
+      <div className="agent-quote">{agent.quote}"</div>
     </div>
   );
 }
 
-// Custom typewriter that exposes which IDEA_SET is currently being typed.
-// Agents around the idea card swap when the idea swaps.
-function useIdeaSetCycle(speed = 38, hold = 1800) {
-  const [setIdx, setSetIdx] = React.useState(0);
-  const [text, setText] = React.useState('');
-  const pos = React.useRef(0);
-  const dir = React.useRef(1);
-  const idx = React.useRef(0);
-
-  React.useEffect(() => {
-    let t;
-    const tick = () => {
-      const phrase = IDEA_SETS[idx.current].idea;
-      pos.current += dir.current;
-      setText(phrase.slice(0, pos.current));
-      if (dir.current === 1 && pos.current >= phrase.length) {
-        dir.current = 0;
-        t = setTimeout(() => { dir.current = -1; tick(); }, hold);
-        return;
-      }
-      if (dir.current === -1 && pos.current <= 0) {
-        dir.current = 1;
-        idx.current = (idx.current + 1) % IDEA_SETS.length;
-        setSetIdx(idx.current);
-      }
-      t = setTimeout(tick, dir.current === -1 ? speed * 0.5 : speed);
-    };
-    t = setTimeout(tick, 600);
-    return () => clearTimeout(t);
-  }, []);
-
-  return { text, set: IDEA_SETS[setIdx], setIdx };
-}
-
-// ── Variant: Council (default) ────────────────────────────────
 function HeroCouncil() {
-  const { text, set, setIdx } = useIdeaSetCycle();
-
-  // Position each agent around the center idea card. Coords are %.
+  const idea = useTypewriter(['whatsapp CRM for kiranas','AI tutor for JEE prep','expense tracker for indie devs','invoice OCR for chartered accts']);
   const positions = [
-    { style: { top: '4%',  left: '2%',  '--tx': '0px', '--ty': '0px' }, delay: 0 },
-    { style: { top: '4%',  right: '2%', '--tx': '0px', '--ty': '0px' }, delay: 0.6 },
-    { style: { bottom: '4%', left: '2%', '--tx': '0px', '--ty': '0px' }, delay: 1.2 },
-    { style: { bottom: '4%', right: '2%','--tx': '0px', '--ty': '0px' }, delay: 1.8 },
+    { agent: AGENTS[0], style: { top: '4%', left: '2%', '--tx': '0px', '--ty': '0px' }, vote: 'no', delay: 0 },
+    { agent: AGENTS[1], style: { top: '4%', right: '2%', '--tx': '0px', '--ty': '0px' }, vote: 'yes', delay: 0.6 },
+    { agent: AGENTS[2], style: { bottom: '4%', left: '2%', '--tx': '0px', '--ty': '0px' }, vote: 'yes', delay: 1.2 },
+    { agent: AGENTS[3], style: { bottom: '4%', right: '2%', '--tx': '0px', '--ty': '0px' }, vote: 'yes', delay: 1.8 },
   ];
-
   return (
     <div className="stage">
       <svg className="stage-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <path d="M 14 14 L 50 50" />
-        <path d="M 86 14 L 50 50" />
-        <path d="M 14 86 L 50 50" />
-        <path d="M 86 86 L 50 50" />
+        <path d="M 14 14 L 50 50" /><path d="M 86 14 L 50 50" />
+        <path d="M 14 86 L 50 50" /><path d="M 86 86 L 50 50" />
         <path className="pulse" d="M 14 14 L 50 50" />
         <path className="pulse" style={{ animationDelay: '.7s' }} d="M 86 14 L 50 50" />
         <path className="pulse" style={{ animationDelay: '1.4s' }} d="M 14 86 L 50 50" />
         <path className="pulse" style={{ animationDelay: '2.1s' }} d="M 86 86 L 50 50" />
       </svg>
-
-      {set.agents.map((agent, i) => (
-        <AgentCard key={setIdx + '-' + i} agent={agent} vote={agent.tone}
-          style={{ ...positions[i].style, animationDelay: positions[i].delay + 's' }} thinking />
+      {positions.map((p, i) => (
+        <AgentCard key={p.agent.short} agent={p.agent} vote={p.vote}
+          style={{ ...p.style, animationDelay: p.delay + 's' }} thinking />
       ))}
-
       <div className="idea">
-        <div className="idea-label"><span className="dot"></span>Custom council, generated for:</div>
-        <div className="idea-text">{text}<span className="cursor"></span></div>
+        <div className="idea-label"><span className="dot"></span>Your idea</div>
+        <div className="idea-text">{idea}<span className="cursor"></span></div>
         <div className="idea-tally">
-          <span><b style={{ color: 'oklch(0.85 0.16 90)' }}>{set.tally.yes}</b> ship</span>
-          <span><b style={{ color: 'var(--accent)' }}>{set.tally.no}</b> hold</span>
-          <span style={{ marginLeft: 'auto' }}>verdict in {set.tally.time}</span>
+          <span><b style={{ color: 'oklch(0.85 0.16 90)' }}>3</b> ship</span>
+          <span><b style={{ color: 'var(--accent)' }}>1</b> hold</span>
+          <span style={{ marginLeft: 'auto' }}>verdict in 4.2s</span>
         </div>
       </div>
-
-      <div className="corner" style={{ top: 0, left: 0 }}>
-        <span className="sq"></span>COUNCIL · {String(setIdx + 1).padStart(3,'0')}
-      </div>
-      <div className="corner" style={{ bottom: 0, right: 0 }}>
-        agents tuned to your SaaS ·<span className="sq"></span>
-      </div>
+      <div className="corner" style={{ top: 0, left: 0 }}><span className="sq"></span>COUNCIL.001</div>
+      <div className="corner" style={{ bottom: 0, right: 0 }}>4 agents · live ·<span className="sq"></span></div>
     </div>
   );
 }
 
-// ── Variant: Conveyor ─────────────────────────────────────────
 function HeroConveyor() {
-  const { set, setIdx } = useIdeaSetCycle();
   return (
     <div className="stage">
       <div className="conveyor">
-        <div className="conveyor-input">
-          <small>Input</small>
-          idea.txt
-        </div>
+        <div className="conveyor-input"><small>Input</small>idea.txt</div>
         <div className="conveyor-track"></div>
         <div className="conveyor-stations" style={{ position: 'absolute', inset: 0 }}>
-          {set.agents.map((a, i) => (
-            <div key={setIdx + '-' + i} className="station">
+          {AGENTS.map((a, i) => (
+            <div key={a.short} className="station">
               <AgentCard agent={a} thinking style={{ '--tx': '0px', '--ty': '0px', animationDelay: i * 0.4 + 's' }} />
               <div className="conveyor-tag">step {i + 1}</div>
             </div>
           ))}
         </div>
-        <div className="conveyor-output">
-          <small>Output</small>
-          ship_plan.md
-        </div>
+        <div className="conveyor-output"><small>Output</small>ship_plan.md</div>
       </div>
-      <div className="corner" style={{ top: 0, left: 0 }}>
-        <span className="sq"></span>PIPELINE · {String(setIdx + 1).padStart(3,'0')}
-      </div>
+      <div className="corner" style={{ top: 0, left: 0 }}><span className="sq"></span>PIPELINE.002</div>
     </div>
   );
 }
 
-// ── Variant: Roundtable ───────────────────────────────────────
 function HeroRoundtable() {
-  const { text, set, setIdx } = useIdeaSetCycle();
-
-  const angles = [-90, 0, 90, 180];
-
+  const idea = useTypewriter(['a Notion for Indian CAs','Cred for tier-2 cities','Linear for film studios']);
+  const ring = [
+    { angle: -90, agent: AGENTS[0], vote: 'no' }, { angle: 0, agent: AGENTS[1], vote: 'yes' },
+    { angle: 90, agent: AGENTS[2], vote: 'yes' }, { angle: 180, agent: AGENTS[3], vote: 'yes' },
+  ];
   return (
     <div className="stage">
       <div className="roundtable">
         <div className="table-ring"></div>
-        {set.agents.map((agent, i) => {
-          const rad = (angles[i] * Math.PI) / 180;
-          const left = 50 + Math.cos(rad) * 40;
-          const top = 50 + Math.sin(rad) * 40;
+        {ring.map((r, i) => {
+          const rad = (r.angle * Math.PI) / 180;
+          const left = 50 + Math.cos(rad) * 40, top = 50 + Math.sin(rad) * 40;
           return (
-            <AgentCard key={setIdx + '-' + i} agent={agent} vote={agent.tone} thinking
-              style={{
-                left: `${left}%`, top: `${top}%`,
-                transform: 'translate(-50%, -50%)',
-                '--tx': '-50%', '--ty': '-50%',
-                animationDelay: i * 0.4 + 's',
-              }} />
+            <AgentCard key={r.agent.short} agent={r.agent} vote={r.vote} thinking
+              style={{ left: `${left}%`, top: `${top}%`, transform: 'translate(-50%, -50%)', '--tx': '-50%', '--ty': '-50%', animationDelay: i * 0.4 + 's' }} />
           );
         })}
-
         <div className="idea" style={{ width: '38%', maxWidth: 220 }}>
           <div className="idea-label"><span className="dot"></span>On the table</div>
-          <div className="idea-text" style={{ fontSize: 14 }}>{text}<span className="cursor"></span></div>
+          <div className="idea-text" style={{ fontSize: 14 }}>{idea}<span className="cursor"></span></div>
         </div>
       </div>
-      <div className="corner" style={{ top: 0, left: 0 }}>
-        <span className="sq"></span>ROUNDTABLE · {String(setIdx + 1).padStart(3,'0')}
-      </div>
+      <div className="corner" style={{ top: 0, left: 0 }}><span className="sq"></span>ROUNDTABLE.003</div>
     </div>
   );
 }
 
-// ── Hero shell (headline + variant switch) ────────────────────
 function Hero({ variant }) {
-  const Variant = variant === 'conveyor' ? HeroConveyor
-                : variant === 'roundtable' ? HeroRoundtable
-                : HeroCouncil;
+  const Variant = variant === 'conveyor' ? HeroConveyor : variant === 'roundtable' ? HeroRoundtable : HeroCouncil;
   return (
     <section className="hero">
       <div className="hero-grid">
@@ -1211,11 +954,11 @@ function Hero({ variant }) {
           <div className="eyebrow">For India SaaS founders</div>
           <h1 className="h1">
             Stop building <span className="strike">alone</span>.<br/>
-            Get a <em>custom</em> AI council<br/>
-            for <span className="serif">your SaaS</span>.
+            Hire <em>four</em> co-founders<br/>
+            in <span className="serif">10 seconds</span>.
           </h1>
           <p className="lede">
-            Type your idea. <b>ShipMyBuild</b> spins up a council of AI agents — <b>generated specifically for your SaaS</b>, with the right experts for your domain. They debate, vote, and hand you a build plan. No deck. No moodboard. Just signal.
+            Type your idea. <b>ShipMyBuild</b> spins up four AI agents — tuned to your specific SaaS — who debate, vote, and hand you a build plan. No deck. No moodboard. Just signal.
           </p>
           <div className="cta-row">
             <button className="btn btn-primary">
@@ -1230,19 +973,17 @@ function Hero({ variant }) {
             </div>
           </div>
         </div>
-
         <Variant />
       </div>
     </section>
   );
 }
-
 Object.assign(window, { Hero, AGENTS, AgentCard, AgentAvatar });
-
 </script>
-<script type="text/babel" data-presets="react">
-// how.jsx — How it works (3 steps)
 
+<script type="text/babel" data-presets="react">
+
+// ─── how.jsx ────────────────────────────────────────────────
 function HowItWorks() {
   return (
     <section className="how" id="how">
@@ -1254,9 +995,7 @@ function HowItWorks() {
             <b>03 STEPS</b>
           </div>
         </div>
-
         <div className="steps">
-          {/* STEP 1 */}
           <div className="step">
             <div className="step-num"><span>STEP</span><b>01</b></div>
             <div className="step-art">
@@ -1271,8 +1010,6 @@ function HowItWorks() {
             <h3 className="step-h">Type your idea, in plain English.</h3>
             <p className="step-p">One sentence is enough. We pull market context, your stack preferences, and the regulatory landscape — automatically.</p>
           </div>
-
-          {/* STEP 2 */}
           <div className="step">
             <div className="step-num"><span>STEP</span><b>02</b></div>
             <div className="step-art">
@@ -1290,25 +1027,21 @@ function HowItWorks() {
                 ))}
               </div>
             </div>
-            <h3 className="step-h">A custom council debates it — live.</h3>
-            <p className="step-p">A whatsapp idea? You get a BSP engineer. A JEE app? A Kota veteran. Each council is generated from scratch, with the right experts for your specific SaaS.</p>
+            <h3 className="step-h">Watch four agents debate it — live.</h3>
+            <p className="step-p">A Skeptic, an Architect, a Hustler, a Bean Counter. Each tuned to your idea. They argue, they push back, they steel-man.</p>
           </div>
-
-          {/* STEP 3 */}
           <div className="step">
             <div className="step-num"><span>STEP</span><b>03</b></div>
             <div className="step-art">
               <div className="art-verdict">
                 <div className="verdict-card">
                   {AGENTS.map((a) => (
-                    <div key={a.id} className="verdict-row">
+                    <div key={a.short} className="verdict-row">
                       <div className="verdict-name">{a.name}</div>
                       <div className={"verdict-vote " + (a.tone === 'yes' ? 'yes' : '')}>{a.tone === 'yes' ? '↑ SHIP' : '↓ HOLD'}</div>
                     </div>
                   ))}
-                  <div className="verdict-tally">
-                    <span>VERDICT</span><b>3 — 1 · SHIP</b>
-                  </div>
+                  <div className="verdict-tally"><span>VERDICT</span><b>3 — 1 · SHIP</b></div>
                 </div>
               </div>
             </div>
@@ -1320,13 +1053,105 @@ function HowItWorks() {
     </section>
   );
 }
-
 Object.assign(window, { HowItWorks });
-
 </script>
-<script type="text/babel" data-presets="react">
-// app.jsx — root, nav, footer, tweaks wiring
 
+<script type="text/babel" data-presets="react">
+
+// ─── PreRegistration section ────────────────────────────────
+function PreRegistration() {
+  const [name, setName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [phone, setPhone] = React.useState('');
+  const [status, setStatus] = React.useState('idle'); // idle | loading | success | error
+  const [errMsg, setErrMsg] = React.useState('');
+
+  const handleSubmit = async () => {
+    if (!name.trim() || !email.trim() || !phone.trim()) {
+      setErrMsg('Please fill in all three fields.'); return;
+    }
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+    if (!emailOk) { setErrMsg('Enter a valid email address.'); return; }
+    setErrMsg('');
+    setStatus('loading');
+    try {
+      await insertPreregistration({ name: name.trim(), email: email.trim(), phone: phone.trim() });
+      setStatus('success');
+    } catch (e) {
+      setErrMsg(e.message || 'Something went wrong. Try again.');
+      setStatus('error');
+    }
+  };
+
+  return (
+    <section className="prereg" id="preregister">
+      <div className="prereg-inner">
+        <div className="prereg-copy">
+          <div className="prereg-label">Early access</div>
+          <h2 className="prereg-h">Get in before we<br/><em>open the doors</em>.</h2>
+          <p className="prereg-sub">
+            We're onboarding the first batch of founders manually. Leave your details and we'll reach out when your spot is ready — no noise, just a ping.
+          </p>
+        </div>
+        <div className="prereg-form-wrap">
+          <div className="prereg-box">
+            {status === 'success' ? (
+              <div className="prereg-success">
+                <div className="prereg-success-icon">✓</div>
+                <h4>You're on the list.</h4>
+                <p>We'll reach out on WhatsApp or email<br/>when your spot opens up.</p>
+              </div>
+            ) : (
+              <>
+                <div className="prereg-fields">
+                  <div className="prereg-field">
+                    <label>Full name</label>
+                    <input
+                      type="text" placeholder="Rahul Mehta"
+                      value={name} onChange={(e) => setName(e.target.value)}
+                      disabled={status === 'loading'}
+                    />
+                  </div>
+                  <div className="prereg-field">
+                    <label>Email</label>
+                    <input
+                      type="email" placeholder="rahul@startup.in"
+                      value={email} onChange={(e) => setEmail(e.target.value)}
+                      disabled={status === 'loading'}
+                    />
+                  </div>
+                  <div className="prereg-field">
+                    <label>Phone / WhatsApp</label>
+                    <input
+                      type="tel" placeholder="+91 98765 43210"
+                      value={phone} onChange={(e) => setPhone(e.target.value)}
+                      disabled={status === 'loading'}
+                    />
+                  </div>
+                </div>
+                {errMsg && <div className="prereg-err">{errMsg}</div>}
+                <button
+                  className="prereg-submit"
+                  onClick={handleSubmit}
+                  disabled={status === 'loading'}
+                >
+                  {status === 'loading' ? 'Saving…' : 'Request early access'}
+                </button>
+                <div className="prereg-note">No spam. We'll only write when it matters.</div>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+Object.assign(window, { PreRegistration });
+</script>
+
+<script type="text/babel" data-presets="react">
+
+// ─── app.jsx — root ─────────────────────────────────────────
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "heroVariant": "council",
   "density": "regular",
@@ -1378,8 +1203,6 @@ function Footer() {
 
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
-
-  // apply tweaks to root
   React.useEffect(() => {
     document.documentElement.dataset.density = t.density;
     document.documentElement.style.setProperty('--accent', t.accent);
@@ -1390,27 +1213,25 @@ function App() {
       <Nav />
       <Hero variant={t.heroVariant} />
       <HowItWorks />
+      <PreRegistration />
       <Footer />
-
       <TweaksPanel title="Tweaks">
         <TweakSection label="Hero variant" />
         <TweakRadio
           label="Layout"
           value={t.heroVariant}
           options={[
-            { value: 'council',    label: 'Council' },
-            { value: 'conveyor',   label: 'Pipeline' },
+            { value: 'council', label: 'Council' },
+            { value: 'conveyor', label: 'Pipeline' },
             { value: 'roundtable', label: 'Round' },
           ]}
           onChange={(v) => setTweak('heroVariant', v)} />
-
         <TweakSection label="Density" />
         <TweakRadio
           label="Spacing"
           value={t.density}
           options={['compact', 'regular', 'spacious']}
           onChange={(v) => setTweak('density', v)} />
-
         <TweakSection label="Color" />
         <TweakColor
           label="Accent"
@@ -1422,9 +1243,7 @@ function App() {
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-
 </script>
-
 
 </body>
 </html>
