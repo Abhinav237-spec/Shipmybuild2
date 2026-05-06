@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ShipMyBuild · "Shipped" logo, refined</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF9F5; --ink:#0E0D0B; --ink-2:#2B2924; --ink-3:#6B6862; --ink-4:#B5B1A6;
+    --rule:#E6E3D9; --accent: oklch(0.66 0.19 32); --accent-deep: oklch(0.5 0.18 32);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--paper);color:var(--ink);font-family:"Geist",ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  ::selection{background:var(--ink);color:var(--paper)}
+  .mono{font-family:"Geist Mono",ui-monospace,monospace}
+
+  .page{max-width:1280px;margin:0 auto;padding:48px clamp(20px,4vw,56px) 80px}
+
+  /* ── header ─────────────────────────────────────────────── */
+  .top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--rule);padding-bottom:24px;margin-bottom:48px;gap:24px;flex-wrap:wrap}
+  .top h1{font-size:clamp(32px,4vw,52px);line-height:1;letter-spacing:-0.03em;font-weight:600;max-width:22ch}
+  .top h1 em{font-family:"Instrument Serif";font-style:italic;font-weight:400}
+  .top .meta{font-family:"Geist Mono";font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em;text-align:right;line-height:1.3}
+  .top .meta b{display:block;color:var(--ink);font-weight:600;font-size:13px;margin-top:4px;white-space:nowrap}
+
+  /* ── hero feature card ──────────────────────────────────── */
+  .hero{
+    border:1px solid var(--rule);border-radius:18px;overflow:hidden;
+    display:grid;grid-template-columns:1.2fr 1fr;background:var(--paper);margin-bottom:48px;
+  }
+  @media (max-width:880px){.hero{grid-template-columns:1fr}}
+  .hero-art{
+    background:
+      linear-gradient(180deg,#fff 0%,var(--paper) 100%);
+    position:relative;aspect-ratio:1.2/1;display:grid;place-items:center;
+    border-right:1px solid var(--rule);
+    overflow:hidden;
+  }
+  @media (max-width:880px){.hero-art{border-right:0;border-bottom:1px solid var(--rule);aspect-ratio:1.6/1}}
+  .hero-art::before{
+    content:"";position:absolute;inset:0;
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, var(--ink) 6%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--ink) 6%, transparent) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(circle at 50% 50%, #000 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 30%, transparent 75%);
+  }
+  .hero-mark{position:relative;z-index:1;width:62%}
+  .hero-corners{position:absolute;font-family:"Geist Mono";font-size:10.5px;color:var(--ink-3);letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:6px;z-index:2}
+  .hero-corners .sq{width:5px;height:5px;background:var(--accent)}
+
+  .hero-info{padding:36px 36px 32px;display:flex;flex-direction:column;gap:18px;justify-content:center}
+  .hero-info .eye{font-family:"Geist Mono";font-size:11px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+  .hero-info .eye::before{content:"";width:18px;height:1px;background:var(--accent)}
+  .hero-info h2{font-size:clamp(28px,3vw,40px);line-height:1.05;letter-spacing:-0.025em;font-weight:600;text-wrap:balance}
+  .hero-info h2 em{font-family:"Instrument Serif";font-style:italic;font-weight:400}
+  .hero-info p{font-size:15px;line-height:1.55;color:var(--ink-2);max-width:42ch}
+  .specs{display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;font-family:"Geist Mono";font-size:11px;color:var(--ink-3);margin-top:10px;border-top:1px dashed var(--rule);padding-top:18px}
+  .specs b{display:block;color:var(--ink);font-weight:600;font-size:13px;letter-spacing:-.01em;margin-top:3px;font-family:"Geist"}
+
+  /* ── variations grid ────────────────────────────────────── */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border:1px solid var(--rule);border-radius:14px;overflow:hidden}
+  @media (max-width:780px){.grid{grid-template-columns:1fr}}
+  .card{padding:32px 32px 26px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);background:linear-gradient(180deg,#fff 0%,var(--paper) 100%);display:flex;flex-direction:column;gap:20px}
+  .card:nth-child(2n){border-right:0}
+  .card:nth-last-child(-n+2){border-bottom:0}
+  @media (max-width:780px){.card{border-right:0}.card:not(:last-child){border-bottom:1px solid var(--rule)}}
+
+  .tag{font-family:"Geist Mono";font-size:10.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em;display:flex;justify-content:space-between;align-items:center}
+  .tag b{color:var(--ink);font-weight:600}
+  .stage{height:170px;display:grid;place-items:center;border:1px dashed var(--rule);border-radius:10px;background:repeating-linear-gradient(45deg,transparent 0 18px,color-mix(in oklab,var(--rule) 35%,transparent) 18px 19px)}
+  .stage.dark{background:#0E0D0B;border-style:solid;border-color:#0E0D0B}
+
+  .label h3{font-size:18px;letter-spacing:-0.02em;font-weight:600;margin-bottom:6px}
+  .label p{font-size:13px;color:var(--ink-2);line-height:1.45;max-width:42ch}
+
+  /* ── lockups section ────────────────────────────────────── */
+  .lockups{margin-top:48px;border-top:1px solid var(--rule);padding-top:36px}
+  .lockups h2{font-size:24px;letter-spacing:-0.02em;font-weight:600;margin-bottom:24px}
+  .lockup-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+  .lockup{padding:28px 24px;border:1px solid var(--rule);border-radius:12px;display:flex;align-items:center;gap:14px}
+  .lockup.dark{background:#0E0D0B;border-color:#0E0D0B;color:#FAF9F5}
+  .lockup .nm{font-weight:700;font-size:18px;letter-spacing:-0.015em}
+  .lockup .sub{font-family:"Geist Mono";font-size:10.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+  .lockup.dark .sub{color:var(--ink-4)}
+  .lockup-info{display:flex;flex-direction:column;gap:1px;min-width:0}
+
+  /* ── sizes strip ────────────────────────────────────────── */
+  .sizes{margin-top:36px;display:flex;align-items:flex-end;gap:24px;padding:28px;border:1px solid var(--rule);border-radius:12px;background:linear-gradient(180deg,#fff,var(--paper));overflow-x:auto}
+  .sizes-item{text-align:center;flex-shrink:0}
+  .sizes-item .h{display:flex;align-items:flex-end;justify-content:center;height:100px}
+  .sizes-item .lbl{font-family:"Geist Mono";font-size:10px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em;margin-top:10px}
+
+  .note{margin-top:40px;padding:22px;border:1px dashed var(--rule);border-radius:12px;font-size:14px;color:var(--ink-2);line-height:1.5;background:color-mix(in oklab,var(--paper) 50%,white)}
+  .note b{color:var(--ink)}
+  .note code{font-family:"Geist Mono";font-size:12.5px;background:var(--paper);padding:2px 6px;border-radius:4px;border:1px solid var(--rule)}
+</style>
+</head>
+<body>
+
+<!--
+  All logo marks are SVG defs reused at multiple sizes.
+  The "hero" mark = MARK-A.   Variations B/C/D explore tweaks.
+-->
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+
+    <!-- Gradient: ink → ink (used for monochrome dark) -->
+    <linearGradient id="ink-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1A1814"/>
+      <stop offset="100%" stop-color="#0E0D0B"/>
+    </linearGradient>
+
+    <!-- Gradient: accent (warm, hot to deep) -->
+    <linearGradient id="accent-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="oklch(0.74 0.19 50)"/>
+      <stop offset="100%" stop-color="oklch(0.58 0.19 25)"/>
+    </linearGradient>
+
+    <!-- ════════ MARK A — the hero: stenciled S → arrow with AI node ════════ -->
+    <symbol id="mark-a" viewBox="0 0 100 100">
+      <!-- top bar (dark) -->
+      <path d="M 22 16 L 78 16 A 7 7 0 0 1 78 30 L 22 30 A 7 7 0 0 1 22 16 Z" fill="url(#ink-grad)"/>
+      <!-- node detail on top bar (suggests data-in) -->
+      <circle cx="71" cy="23" r="2.4" fill="#FAF9F5"/>
+
+      <!-- middle bar (dark) — slightly inset, with a connection slot on left -->
+      <path d="M 26 41 L 74 41 A 7 7 0 0 1 74 55 L 26 55 A 7 7 0 0 1 26 41 Z" fill="url(#ink-grad)"/>
+      <!-- mid node (the "thinking" agent) -->
+      <circle cx="29" cy="48" r="2.4" fill="oklch(0.66 0.19 32)"/>
+
+      <!-- bottom: arrow shape in accent -->
+      <!-- shaft -->
+      <rect x="22" y="66" width="44" height="14" rx="7" fill="url(#accent-grad)"/>
+      <!-- arrowhead (clean isoceles, integrated with shaft) -->
+      <path d="M 60 60 L 84 73 L 60 86 Z" fill="url(#accent-grad)"/>
+      <!-- tiny hot spark inside arrowhead -->
+      <circle cx="71" cy="73" r="1.6" fill="#FAF9F5" opacity=".9"/>
+    </symbol>
+
+    <!-- MARK A · monochrome variants -->
+    <symbol id="mark-a-mono" viewBox="0 0 100 100">
+      <path d="M 22 16 L 78 16 A 7 7 0 0 1 78 30 L 22 30 A 7 7 0 0 1 22 16 Z" fill="currentColor"/>
+      <circle cx="71" cy="23" r="2.4" fill="var(--bg, #FAF9F5)"/>
+      <path d="M 26 41 L 74 41 A 7 7 0 0 1 74 55 L 26 55 A 7 7 0 0 1 26 41 Z" fill="currentColor"/>
+      <circle cx="29" cy="48" r="2.4" fill="var(--bg, #FAF9F5)"/>
+      <rect x="22" y="66" width="44" height="14" rx="7" fill="currentColor"/>
+      <path d="M 60 60 L 84 73 L 60 86 Z" fill="currentColor"/>
+      <circle cx="71" cy="73" r="1.6" fill="var(--bg, #FAF9F5)"/>
+    </symbol>
+
+    <!-- ════════ MARK B — sharper, no nodes, cleaner geometry ════════ -->
+    <symbol id="mark-b" viewBox="0 0 100 100">
+      <rect x="20" y="16" width="60" height="14" rx="3" fill="#0E0D0B"/>
+      <rect x="20" y="41" width="60" height="14" rx="3" fill="#0E0D0B"/>
+      <rect x="20" y="66" width="44" height="14" rx="3" fill="oklch(0.66 0.19 32)"/>
+      <path d="M 60 60 L 84 73 L 60 86 Z" fill="oklch(0.66 0.19 32)"/>
+    </symbol>
+
+    <!-- ════════ MARK C — connected: bars stitched by a hairline ════════ -->
+    <symbol id="mark-c" viewBox="0 0 100 100">
+      <!-- connection trace, AI/circuit feel -->
+      <path d="M 76 30 Q 86 30 86 36 L 86 41 Q 86 47 80 47 L 26 47 Q 20 47 20 53 L 20 60 Q 20 66 26 66"
+            fill="none" stroke="oklch(0.66 0.19 32)" stroke-width="1.8" stroke-linecap="round" opacity=".55"/>
+      <circle cx="86" cy="35" r="1.8" fill="oklch(0.66 0.19 32)"/>
+      <circle cx="20" cy="53" r="1.8" fill="oklch(0.66 0.19 32)"/>
+
+      <path d="M 22 16 L 78 16 A 7 7 0 0 1 78 30 L 22 30 A 7 7 0 0 1 22 16 Z" fill="#0E0D0B"/>
+      <path d="M 26 41 L 74 41 A 7 7 0 0 1 74 55 L 26 55 A 7 7 0 0 1 26 41 Z" fill="#0E0D0B"/>
+      <rect x="22" y="66" width="44" height="14" rx="7" fill="oklch(0.66 0.19 32)"/>
+      <path d="M 60 60 L 84 73 L 60 86 Z" fill="oklch(0.66 0.19 32)"/>
+    </symbol>
+
+    <!-- ════════ MARK D — minimal: single accent on shaft only ════════ -->
+    <symbol id="mark-d" viewBox="0 0 100 100">
+      <path d="M 22 16 L 78 16 A 7 7 0 0 1 78 30 L 22 30 A 7 7 0 0 1 22 16 Z" fill="#0E0D0B"/>
+      <path d="M 26 41 L 74 41 A 7 7 0 0 1 74 55 L 26 55 A 7 7 0 0 1 26 41 Z" fill="#0E0D0B"/>
+      <rect x="22" y="66" width="44" height="14" rx="7" fill="#0E0D0B"/>
+      <path d="M 60 60 L 84 73 L 60 86 Z" fill="oklch(0.66 0.19 32)"/>
+    </symbol>
+
+  </defs>
+</svg>
+
+
+<div class="page">
+
+  <div class="top">
+    <h1>"Shipped" — refined into a real <em>AI company</em> mark.</h1>
+    <div class="meta">
+      <div>LOGO 03 · v2</div>
+      <b>04 VARIATIONS</b>
+    </div>
+  </div>
+
+  <!-- ── hero: featured mark A ────────────────────────────── -->
+  <div class="hero">
+    <div class="hero-art">
+      <div class="hero-corners" style="top:14px;left:14px"><span class="sq"></span>SHIPPED · A</div>
+      <div class="hero-corners" style="bottom:14px;right:14px">v2.0 · 1:1 · grid<span class="sq"></span></div>
+      <svg class="hero-mark" viewBox="0 0 100 100"><use href="#mark-a"/></svg>
+    </div>
+
+    <div class="hero-info">
+      <div class="eye">The hero mark</div>
+      <h2>Three stacked bars. Two <em>data nodes</em>. One arrow that ships.</h2>
+      <p>An S built from three bars — the top two carry tiny pulse nodes (an idea coming in, an agent thinking on it), the third launches forward as the arrowhead. Reads as "ship it" instantly. Reads as AI when you look closer.</p>
+
+      <div class="specs">
+        <div><span>FORMAT</span><b>SVG · 1 path family</b></div>
+        <div><span>COLORS</span><b>Ink + warm accent</b></div>
+        <div><span>SAFE AREA</span><b>16px on all sides</b></div>
+        <div><span>MIN SIZE</span><b>16px (favicon)</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 4 variations of the same idea ───────────────────── -->
+  <div class="grid">
+
+    <!-- A : hero mark, repeated in card form for parity -->
+    <div class="card">
+      <div class="tag"><span>A · Hot</span><b>NODES + GRADIENT</b></div>
+      <div class="stage" style="background:linear-gradient(180deg,#fff,var(--paper))">
+        <svg width="118" height="118" viewBox="0 0 100 100"><use href="#mark-a"/></svg>
+      </div>
+      <div class="label">
+        <h3>A · The hero</h3>
+        <p>Two-tone accent gradient on the arrow, white pulse nodes embedded in the bars. Most "AI-product" of the four — gradient + nodes signal smart-system.</p>
+      </div>
+    </div>
+
+    <!-- B : geometric, sharp -->
+    <div class="card">
+      <div class="tag"><span>B · Engineered</span><b>SHARP CORNERS</b></div>
+      <div class="stage" style="background:linear-gradient(180deg,#fff,var(--paper))">
+        <svg width="118" height="118" viewBox="0 0 100 100"><use href="#mark-b"/></svg>
+      </div>
+      <div class="label">
+        <h3>B · Engineered</h3>
+        <p>Square-cornered bars, flat fills, no nodes. Reads as a precision tool — Vercel/Linear adjacent. The most disciplined of the set.</p>
+      </div>
+    </div>
+
+    <!-- C : circuit trace -->
+    <div class="card">
+      <div class="tag"><span>C · Circuit</span><b>CONNECTED</b></div>
+      <div class="stage" style="background:linear-gradient(180deg,#fff,var(--paper))">
+        <svg width="118" height="118" viewBox="0 0 100 100"><use href="#mark-c"/></svg>
+      </div>
+      <div class="label">
+        <h3>C · Circuit</h3>
+        <p>A hairline accent trace stitches the bars top→bottom, like a circuit routing data through the council. Loud-AI. Best at large sizes; collapses below 28px.</p>
+      </div>
+    </div>
+
+    <!-- D : minimal -->
+    <div class="card">
+      <div class="tag"><span>D · Quiet</span><b>SINGLE ACCENT</b></div>
+      <div class="stage" style="background:linear-gradient(180deg,#fff,var(--paper))">
+        <svg width="118" height="118" viewBox="0 0 100 100"><use href="#mark-d"/></svg>
+      </div>
+      <div class="label">
+        <h3>D · Quiet</h3>
+        <p>All-black except the arrowhead — accent is the punchline. Most timeless. Plays well in dense UIs and dark headers without competing.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── lockups (with the hero mark A) ──────────────────── -->
+  <div class="lockups">
+    <h2>Lockups · using mark A</h2>
+    <div class="lockup-grid">
+
+      <div class="lockup">
+        <svg width="32" height="32" viewBox="0 0 100 100"><use href="#mark-a"/></svg>
+        <div class="lockup-info">
+          <span class="nm">ShipMyBuild</span>
+          <span class="sub">Light · primary</span>
+        </div>
+      </div>
+
+      <div class="lockup dark">
+        <svg width="32" height="32" viewBox="0 0 100 100"><use href="#mark-a"/></svg>
+        <div class="lockup-info">
+          <span class="nm">ShipMyBuild</span>
+          <span class="sub">Dark · primary</span>
+        </div>
+      </div>
+
+      <div class="lockup">
+        <svg width="32" height="32" viewBox="0 0 100 100" style="color:#0E0D0B"><use href="#mark-a-mono"/></svg>
+        <div class="lockup-info">
+          <span class="nm">ShipMyBuild</span>
+          <span class="sub">Light · monochrome</span>
+        </div>
+      </div>
+
+      <div class="lockup dark" style="--bg:#0E0D0B">
+        <svg width="32" height="32" viewBox="0 0 100 100" style="color:#FAF9F5"><use href="#mark-a-mono"/></svg>
+        <div class="lockup-info">
+          <span class="nm">ShipMyBuild</span>
+          <span class="sub">Dark · monochrome</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── size strip ─────────────────────────────────────── -->
+  <div class="sizes">
+    <div class="sizes-item">
+      <div class="h"><svg width="96" height="96" viewBox="0 0 100 100"><use href="#mark-a"/></svg></div>
+      <div class="lbl">96px · brand</div>
+    </div>
+    <div class="sizes-item">
+      <div class="h"><svg width="64" height="64" viewBox="0 0 100 100"><use href="#mark-a"/></svg></div>
+      <div class="lbl">64px · social</div>
+    </div>
+    <div class="sizes-item">
+      <div class="h"><svg width="40" height="40" viewBox="0 0 100 100"><use href="#mark-a"/></svg></div>
+      <div class="lbl">40px · app</div>
+    </div>
+    <div class="sizes-item">
+      <div class="h"><svg width="28" height="28" viewBox="0 0 100 100"><use href="#mark-a"/></svg></div>
+      <div class="lbl">28px · nav</div>
+    </div>
+    <div class="sizes-item">
+      <div class="h"><svg width="20" height="20" viewBox="0 0 100 100"><use href="#mark-a"/></svg></div>
+      <div class="lbl">20px · inline</div>
+    </div>
+    <div class="sizes-item">
+      <div class="h"><svg width="16" height="16" viewBox="0 0 100 100"><use href="#mark-a"/></svg></div>
+      <div class="lbl">16px · favicon</div>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>Recommendation:</b> ship with <b>A (Hero)</b> as the primary brand mark and use <b>D (Quiet)</b> wherever the gradient would compete (dark backgrounds, dense UIs, social avatar tiles below 28px). I'd skip C in real product use — the trace dies below 32px. Tell me which one to wire into the landing page nav, and I'll update the favicon link too.
+  </div>
+
+</div>
+</body>
+</html>

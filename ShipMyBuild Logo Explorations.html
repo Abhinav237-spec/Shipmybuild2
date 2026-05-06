@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ShipMyBuild · logo explorations</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF9F5; --ink:#0E0D0B; --ink-2:#2B2924; --ink-3:#6B6862;
+    --rule:#E6E3D9; --accent: oklch(0.66 0.19 32);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--paper);color:var(--ink);font-family:"Geist",ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .mono{font-family:"Geist Mono",ui-monospace,monospace}
+  ::selection{background:var(--ink);color:var(--paper)}
+
+  .page{max-width:1200px;margin:0 auto;padding:48px clamp(20px,4vw,56px) 80px}
+
+  .top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:1px solid var(--rule);padding-bottom:24px;margin-bottom:48px;gap:24px;flex-wrap:wrap}
+  .top h1{font-size:clamp(32px,4vw,52px);line-height:1;letter-spacing:-0.03em;font-weight:600;max-width:18ch}
+  .top h1 em{font-family:"Instrument Serif";font-style:italic;font-weight:400}
+  .top .meta{font-family:"Geist Mono";font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em;text-align:right;line-height:1.3}
+  .top .meta b{display:block;color:var(--ink);font-weight:600;font-size:13px;margin-top:4px}
+
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border:1px solid var(--rule);border-radius:14px;overflow:hidden;background:var(--paper)}
+  @media (max-width:780px){.grid{grid-template-columns:1fr}}
+
+  .card{padding:36px 36px 28px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);position:relative;display:flex;flex-direction:column;gap:24px;background:linear-gradient(180deg,#fff 0%,var(--paper) 100%)}
+  .card:nth-child(2n){border-right:0}
+  .card:nth-last-child(-n+2){border-bottom:0}
+  @media (max-width:780px){.card{border-right:0}.card:not(:last-child){border-bottom:1px solid var(--rule)}}
+
+  .tag{font-family:"Geist Mono";font-size:10.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em;display:flex;justify-content:space-between;align-items:center}
+  .tag b{color:var(--ink);font-weight:600}
+  .stage{height:200px;display:grid;place-items:center;border:1px dashed var(--rule);border-radius:10px;background:repeating-linear-gradient(45deg,transparent 0 20px,color-mix(in oklab,var(--rule) 35%,transparent) 20px 21px)}
+  .label{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+  .label h3{font-size:20px;letter-spacing:-0.02em;font-weight:600}
+  .label p{font-size:13px;color:var(--ink-2);line-height:1.45;max-width:38ch}
+
+  .uses{display:flex;align-items:center;gap:18px;padding-top:16px;border-top:1px dashed var(--rule)}
+  .uses .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--rule);border-radius:8px;font-size:12px;color:var(--ink-2);background:var(--paper)}
+  .uses .pill.dark{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .uses .pill.dark .nm{color:var(--paper)}
+  .uses .pill .nm{font-weight:600;color:var(--ink)}
+  .uses .pill .fav{font-family:"Geist Mono";font-size:10px;color:var(--ink-3)}
+
+  /* ─────── LOGO 1 — Container stack with S notch ─────── */
+  .logo-1{position:relative;width:140px;height:140px}
+  .logo-1 svg{width:100%;height:100%}
+
+  /* ─────── LOGO 2 — Council quartet ─────── */
+  .logo-2{position:relative;width:140px;height:140px}
+  .logo-2 svg{width:100%;height:100%;overflow:visible}
+
+  /* ─────── LOGO 3 — Send arrow S ─────── */
+  .logo-3{position:relative;width:140px;height:140px}
+  .logo-3 svg{width:100%;height:100%}
+
+  /* ─────── LOGO 4 — Bracket [s] ─────── */
+  .logo-4{display:flex;align-items:center;font-family:"Geist Mono";font-weight:700;font-size:96px;letter-spacing:-0.04em;line-height:1}
+  .logo-4 .br{color:var(--accent);font-weight:500}
+  .logo-4 .s{color:var(--ink);position:relative;padding:0 4px}
+  .logo-4 .s::after{content:"";position:absolute;left:6px;right:6px;bottom:18%;height:8px;background:var(--accent);opacity:0;animation:slash 0s}
+
+  /* ─────── tiny inline (favicon-scale) ─────── */
+  .tiny{display:inline-block;width:24px;height:24px;vertical-align:middle;border-radius:6px;overflow:hidden;flex-shrink:0;position:relative}
+  /* tiny variants */
+  .tiny.t1{background:var(--ink)}
+  .tiny.t1 svg{width:100%;height:100%}
+
+  .tiny.t2{background:var(--paper);border:1px solid var(--rule)}
+  .tiny.t2 svg{width:100%;height:100%}
+
+  .tiny.t3{background:var(--ink)}
+  .tiny.t3 svg{width:100%;height:100%}
+
+  .tiny.t4{background:var(--ink);font-family:"Geist Mono";font-weight:700;font-size:14px;color:var(--paper);display:grid;place-items:center}
+  .tiny.t4 i{color:var(--accent);font-style:normal;font-weight:500;margin:0 1px}
+
+  /* footer note */
+  .note{margin-top:40px;padding:24px;border:1px dashed var(--rule);border-radius:12px;font-size:14px;color:var(--ink-2);line-height:1.5;background:color-mix(in oklab,var(--paper) 50%,white)}
+  .note b{color:var(--ink)}
+  .note code{font-family:"Geist Mono";font-size:12.5px;background:var(--paper);padding:2px 6px;border-radius:4px;border:1px solid var(--rule)}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="top">
+    <h1>Four <em>logo</em> directions for ShipMyBuild.</h1>
+    <div class="meta">
+      <div>EXPLORATIONS</div>
+      <b>04 DIRECTIONS</b>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- ── 01 Cargo container stack ── -->
+    <div class="card">
+      <div class="tag"><span>01 · Literal</span><b>CARGO</b></div>
+      <div class="stage">
+        <div class="logo-1">
+          <svg viewBox="0 0 100 100">
+            <!-- Top row: 2 containers offset right -->
+            <rect x="38" y="14" width="24" height="22" rx="2" fill="#0E0D0B"/>
+            <rect x="66" y="14" width="24" height="22" rx="2" fill="oklch(0.66 0.19 32)"/>
+            <!-- Detail lines -->
+            <line x1="42" y1="25" x2="58" y2="25" stroke="#FAF9F5" stroke-width="1" opacity=".25"/>
+            <line x1="70" y1="25" x2="86" y2="25" stroke="#FAF9F5" stroke-width="1" opacity=".25"/>
+
+            <!-- Middle row: 2 containers full -->
+            <rect x="10" y="40" width="24" height="22" rx="2" fill="#0E0D0B"/>
+            <rect x="38" y="40" width="24" height="22" rx="2" fill="#0E0D0B"/>
+            <line x1="14" y1="51" x2="30" y2="51" stroke="#FAF9F5" stroke-width="1" opacity=".25"/>
+            <line x1="42" y1="51" x2="58" y2="51" stroke="#FAF9F5" stroke-width="1" opacity=".25"/>
+
+            <!-- Bottom row: 2 containers offset left -->
+            <rect x="10" y="66" width="24" height="22" rx="2" fill="oklch(0.66 0.19 32)"/>
+            <rect x="38" y="66" width="24" height="22" rx="2" fill="#0E0D0B"/>
+            <line x1="14" y1="77" x2="30" y2="77" stroke="#FAF9F5" stroke-width="1" opacity=".25"/>
+            <line x1="42" y1="77" x2="58" y2="77" stroke="#FAF9F5" stroke-width="1" opacity=".25"/>
+
+            <!-- Ground line -->
+            <line x1="6" y1="91" x2="94" y2="91" stroke="#0E0D0B" stroke-width="1.5" stroke-dasharray="2 3" opacity=".4"/>
+          </svg>
+        </div>
+      </div>
+      <div class="label">
+        <h3>Cargo stack</h3>
+        <p>Six shipping containers stacked in a Z-step pattern — reads as both a literal cargo stack and the negative-space S between them. Two accent containers carry the brand color.</p>
+      </div>
+      <div class="uses">
+        <span class="pill">
+          <span class="tiny t1" style="background:#FAF9F5;border:1px solid var(--rule)">
+            <svg viewBox="0 0 100 100"><rect x="38" y="14" width="24" height="22" rx="2" fill="#0E0D0B"/><rect x="66" y="14" width="24" height="22" rx="2" fill="oklch(0.66 0.19 32)"/><rect x="10" y="40" width="24" height="22" rx="2" fill="#0E0D0B"/><rect x="38" y="40" width="24" height="22" rx="2" fill="#0E0D0B"/><rect x="10" y="66" width="24" height="22" rx="2" fill="oklch(0.66 0.19 32)"/><rect x="38" y="66" width="24" height="22" rx="2" fill="#0E0D0B"/></svg>
+          </span>
+          <span class="nm">ShipMyBuild</span>
+        </span>
+        <span class="pill dark">
+          <span class="tiny t1" style="background:#1a1814">
+            <svg viewBox="0 0 100 100"><rect x="38" y="14" width="24" height="22" rx="2" fill="#FAF9F5"/><rect x="66" y="14" width="24" height="22" rx="2" fill="oklch(0.66 0.19 32)"/><rect x="10" y="40" width="24" height="22" rx="2" fill="#FAF9F5"/><rect x="38" y="40" width="24" height="22" rx="2" fill="#FAF9F5"/><rect x="10" y="66" width="24" height="22" rx="2" fill="oklch(0.66 0.19 32)"/><rect x="38" y="66" width="24" height="22" rx="2" fill="#FAF9F5"/></svg>
+          </span>
+          <span class="nm">ShipMyBuild</span>
+        </span>
+        <span class="pill"><span class="tiny t1" style="background:#FAF9F5;border:1px solid var(--rule)"><svg viewBox="0 0 100 100"><rect x="38" y="14" width="24" height="22" rx="2" fill="#0E0D0B"/><rect x="66" y="14" width="24" height="22" rx="2" fill="oklch(0.66 0.19 32)"/><rect x="10" y="40" width="24" height="22" rx="2" fill="#0E0D0B"/><rect x="38" y="40" width="24" height="22" rx="2" fill="#0E0D0B"/><rect x="10" y="66" width="24" height="22" rx="2" fill="oklch(0.66 0.19 32)"/><rect x="38" y="66" width="24" height="22" rx="2" fill="#0E0D0B"/></svg></span><span class="fav">favicon · 24px</span></span>
+      </div>
+    </div>
+
+    <!-- ── 02 Council quartet ── -->
+    <div class="card">
+      <div class="tag"><span>02 · Conceptual</span><b>COUNCIL</b></div>
+      <div class="stage">
+        <div class="logo-2">
+          <svg viewBox="0 0 100 100">
+            <!-- subtle ring -->
+            <circle cx="50" cy="50" r="36" fill="none" stroke="#0E0D0B" stroke-width="1" stroke-dasharray="1 5" opacity=".18"/>
+            <!-- 4 agent dots -->
+            <circle cx="30" cy="32" r="13" fill="#0E0D0B"/>
+            <circle cx="70" cy="32" r="13" fill="#0E0D0B"/>
+            <circle cx="30" cy="68" r="13" fill="#0E0D0B"/>
+            <circle cx="70" cy="68" r="13" fill="oklch(0.66 0.19 32)"/>
+            <!-- center S, tighter -->
+            <text x="50" y="58" text-anchor="middle" font-family="Geist Mono,monospace" font-weight="800" font-size="22" fill="#0E0D0B">S</text>
+          </svg>
+        </div>
+      </div>
+      <div class="label">
+        <h3>Quartet</h3>
+        <p>Four agent-dots cluster around a central S — the council itself becomes the mark. One dot is accent — the tie-breaker vote.</p>
+      </div>
+      <div class="uses">
+        <span class="pill">
+          <span class="tiny t2">
+            <svg viewBox="0 0 100 100"><circle cx="30" cy="32" r="14" fill="#0E0D0B"/><circle cx="70" cy="32" r="14" fill="#0E0D0B"/><circle cx="30" cy="68" r="14" fill="#0E0D0B"/><circle cx="70" cy="68" r="14" fill="oklch(0.66 0.19 32)"/></svg>
+          </span>
+          <span class="nm">ShipMyBuild</span>
+        </span>
+        <span class="pill dark">
+          <span class="tiny t2" style="background:#1a1814;border-color:#1a1814">
+            <svg viewBox="0 0 100 100"><circle cx="30" cy="32" r="14" fill="#FAF9F5"/><circle cx="70" cy="32" r="14" fill="#FAF9F5"/><circle cx="30" cy="68" r="14" fill="#FAF9F5"/><circle cx="70" cy="68" r="14" fill="oklch(0.66 0.19 32)"/></svg>
+          </span>
+          <span class="nm">ShipMyBuild</span>
+        </span>
+        <span class="pill"><span class="tiny t2"><svg viewBox="0 0 100 100"><circle cx="30" cy="32" r="14" fill="#0E0D0B"/><circle cx="70" cy="32" r="14" fill="#0E0D0B"/><circle cx="30" cy="68" r="14" fill="#0E0D0B"/><circle cx="70" cy="68" r="14" fill="oklch(0.66 0.19 32)"/></svg></span><span class="fav">favicon · 24px</span></span>
+      </div>
+    </div>
+
+    <!-- ── 03 Send arrow S ── -->
+    <div class="card">
+      <div class="tag"><span>03 · Kinetic</span><b>SHIPPED</b></div>
+      <div class="stage">
+        <div class="logo-3">
+          <svg viewBox="0 0 100 100">
+            <!-- Cleaner S: two horizontal bars + diagonal connector, then arrow tip -->
+            <!-- top bar -->
+            <rect x="18" y="18" width="58" height="14" rx="7" fill="#0E0D0B"/>
+            <!-- middle bar -->
+            <rect x="22" y="43" width="54" height="14" rx="7" fill="#0E0D0B"/>
+            <!-- bottom bar w/ arrow head, in accent -->
+            <path d="M 18 75 L 62 75 L 62 68 L 84 75 L 62 82 L 62 75 Z" fill="oklch(0.66 0.19 32)" stroke="oklch(0.66 0.19 32)" stroke-width="6" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="label">
+        <h3>Shipped</h3>
+        <p>Three stacked bars form a stenciled S, the bottom bar fires forward as an arrow. Reads as "SHIP IT" instantly — holds up at favicon size.</p>
+      </div>
+      <div class="uses">
+        <span class="pill">
+          <span class="tiny t3">
+            <svg viewBox="0 0 100 100"><rect x="18" y="18" width="58" height="14" rx="7" fill="#FAF9F5"/><rect x="22" y="43" width="54" height="14" rx="7" fill="#FAF9F5"/><path d="M 18 75 L 62 75 L 62 68 L 84 75 L 62 82 L 62 75 Z" fill="oklch(0.66 0.19 32)" stroke="oklch(0.66 0.19 32)" stroke-width="6" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="nm">ShipMyBuild</span>
+        </span>
+        <span class="pill dark">
+          <span class="tiny t3" style="background:#1a1814">
+            <svg viewBox="0 0 100 100"><rect x="18" y="18" width="58" height="14" rx="7" fill="#FAF9F5"/><rect x="22" y="43" width="54" height="14" rx="7" fill="#FAF9F5"/><path d="M 18 75 L 62 75 L 62 68 L 84 75 L 62 82 L 62 75 Z" fill="oklch(0.66 0.19 32)" stroke="oklch(0.66 0.19 32)" stroke-width="6" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="nm">ShipMyBuild</span>
+        </span>
+        <span class="pill"><span class="tiny t3"><svg viewBox="0 0 100 100"><rect x="18" y="18" width="58" height="14" rx="7" fill="#FAF9F5"/><rect x="22" y="43" width="54" height="14" rx="7" fill="#FAF9F5"/><path d="M 18 75 L 62 75 L 62 68 L 84 75 L 62 82 L 62 75 Z" fill="oklch(0.66 0.19 32)" stroke="oklch(0.66 0.19 32)" stroke-width="6" stroke-linejoin="round"/></svg></span><span class="fav">favicon · 24px</span></span>
+      </div>
+    </div>
+
+    <!-- ── 04 Bracket [s] ── -->
+    <div class="card">
+      <div class="tag"><span>04 · Code</span><b>WORDMARK</b></div>
+      <div class="stage">
+        <div class="logo-4">
+          <span class="br">[</span><span class="s">s</span><span class="br">]</span>
+        </div>
+      </div>
+      <div class="label">
+        <h3>Bracket S</h3>
+        <p>The mono brackets nod to code, configs, builds. Pure typography — no SVG. Loud at any size, friendliest in dev contexts.</p>
+      </div>
+      <div class="uses">
+        <span class="pill"><span class="tiny t4"><i>[</i>s<i>]</i></span><span class="nm">ShipMyBuild</span></span>
+        <span class="pill dark"><span class="tiny t4" style="background:#1a1814"><i>[</i>s<i>]</i></span><span class="nm">ShipMyBuild</span></span>
+        <span class="pill"><span class="tiny t4"><i>[</i>s<i>]</i></span><span class="fav">favicon · 24px</span></span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="note">
+    <b>How to read these:</b> each direction is shown as a 140px hero mark, then in three real contexts — the nav lockup (light + dark) and a 24px favicon. Pick a winner and tell me which one — I'll wire it into the landing page nav, footer, and add a real <code>&lt;link rel="icon"&gt;</code>. If you want a hybrid (e.g. <b>02 Council</b>'s quartet with <b>03 Shipped</b>'s arrow energy), say the word.
+  </div>
+
+</div>
+</body>
+</html>
