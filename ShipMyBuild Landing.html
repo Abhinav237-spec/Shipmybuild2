@@ -577,26 +577,21 @@ body {
 
 <script type="text/babel" data-presets="react">
 
-// ─── Supabase config ────────────────────────────────────────
-// Replace these with your actual Supabase project values.
-// You can find them in: Supabase dashboard → Project Settings → API
-const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
-const SUPABASE_ANON_KEY = "YOUR_ANON_PUBLIC_KEY";
+// ─── Registration — calls our own Vercel serverless route ───
+// No API keys in the browser. Keys live in Vercel Environment Variables.
+// Vercel dashboard → Project → Settings → Environment Variables:
+//   SUPABASE_URL         = https://YOUR_PROJECT_ID.supabase.co
+//   SUPABASE_SERVICE_KEY = your service_role secret key
 
 async function insertPreregistration({ name, email, phone }) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/preregistrations`, {
+  const res = await fetch("/api/register", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "apikey": SUPABASE_ANON_KEY,
-      "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-      "Prefer": "return=minimal",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name, email, phone }),
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    throw new Error(err.message || err.details || "Something went wrong.");
+    throw new Error(err.error || "Something went wrong.");
   }
 }
 
